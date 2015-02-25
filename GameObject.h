@@ -1,9 +1,8 @@
 #pragma once
 
 #include <Ogre.h>
-#include "BulletContactCallback.h"
-#include "Simulator.h"
-class OgreMotionState;
+//#include "Simulator.h"
+//class OgreMotionState;
 
  
 
@@ -13,8 +12,8 @@ protected:
     Ogre::SceneManager* sceneMgr;
     Ogre::SceneNode* rootNode;
     Ogre::Entity* geom;
-    OgreMotionState* motionState;
-
+//    OgreMotionState* motionState;
+/*
     Simulator* simulator;
     btCollisionShape* shape;
     btRigidBody* body;
@@ -29,4 +28,5 @@ protected:
 
     CollisionContext* context;
     BulletContactCallback* cCallBack;
-}
+    */
+};

@@ -1,0 +1,12 @@
+material Court/Front
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+			}
+		}
+	}
+}

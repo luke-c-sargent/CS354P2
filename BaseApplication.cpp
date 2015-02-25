@@ -36,84 +36,14 @@ void BaseApplication::createScene(void)
     // create your scene
 	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.3f,0.1f,0.3f));
 	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
-	Ogre::Entity* ball = mSceneMgr->createEntity("ball","sphere.mesh");
-	ball->setCastShadows(true);
 
-	ballNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("ballNode");
-	ballNode->attachObject(ball);
-	ball->setMaterialName("Examples/Eyeball");
-    //set ball initial values
-    ballr=100;
-    ballspd=100.0;
-    srand(time(NULL));
-    int rando = rand();
+    //create court
+    Court * court = new Court(mSceneMgr);
 
-    //Ogre::LogManager::getSingletonPtr()->logMessage("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    //Ogre::LogManager::getSingletonPtr()->logMessage(Ogre::StringConverter::toString(rando));
-    float x = (float)((rando%100)-50)/50.;
-    rando=rando/100;
-    float y = (float)((rando%100)-50)/50.;
-    rando=rando/100;
-    float z = (float)((rando%100)-50)/50.;
-    rando=rando/100;
-    balldir = Ogre::Vector3(x,y,z);
-    roomsize=700;
-    Ogre::LogManager::getSingletonPtr()->logMessage(Ogre::StringConverter::toString(balldir));
-//walls
-	//plane declaration
-	Ogre::Plane plane(Ogre::Vector3::UNIT_Y,0);
-	//ground
-	Ogre::MeshManager::getSingleton().createPlane("ground",Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,plane,
-1500,1500,20,20,true,1,5,5,Ogre::Vector3::UNIT_Z);
-	Ogre::Entity* groundE = mSceneMgr->createEntity("GroundEntity","ground");
-	Ogre::SceneNode* groundNode=mSceneMgr->getRootSceneNode()->createChildSceneNode("groundNode");
-	groundNode->attachObject(groundE);
-	groundE->setMaterialName("Examples/Rockwall");
-	groundE->setCastShadows(false);
-	groundNode->translate(0,-700,0);
-	//right wall
-	Ogre::MeshManager::getSingleton().createPlane("rightwall",Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,plane,
-1500,1500,20,20,true,1,5,5,Ogre::Vector3::UNIT_Z);
-	Ogre::Entity* rwallE = mSceneMgr->createEntity("RightWallEntity","rightwall");
-	Ogre::SceneNode* rwallNode=mSceneMgr->getRootSceneNode()->createChildSceneNode("rwallNode");
-	rwallNode->attachObject(rwallE);
-	rwallE->setMaterialName("Examples/Rockwall");
-	rwallE->setCastShadows(false);
-	rwallNode->rotate(Ogre::Quaternion(Ogre::Degree(90),Ogre::Vector3(0,0,1)));
-    rwallNode->translate(700,0,0);
-	//left wall
-    Ogre::MeshManager::getSingleton().createPlane("leftwall",Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,plane,
-1500,1500,20,20,true,1,5,5,Ogre::Vector3::UNIT_Z);
-	Ogre::Entity* lwallE = mSceneMgr->createEntity("LeftWallEntity","leftwall");
-	Ogre::SceneNode* lwallNode=mSceneMgr->getRootSceneNode()->createChildSceneNode("lwallNode");
-	lwallNode->attachObject(lwallE);
-	lwallE->setMaterialName("Examples/Rockwall");
-	lwallE->setCastShadows(false);
-	lwallNode->rotate(Ogre::Quaternion(Ogre::Degree(-90),Ogre::Vector3(0,0,1)));
-    lwallNode->translate(-700,0,0);
-    //back wall
-    Ogre::MeshManager::getSingleton().createPlane("backwall",Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,plane,
-1500,1500,20,20,true,1,5,5,Ogre::Vector3::UNIT_Z);
-	Ogre::Entity* bwallE = mSceneMgr->createEntity("BackWallEntity","backwall");
-	Ogre::SceneNode* bwallNode=mSceneMgr->getRootSceneNode()->createChildSceneNode("bwallNode");
-	bwallNode->attachObject(bwallE);
-	bwallE->setMaterialName("Examples/Rockwall");
-	bwallE->setCastShadows(false);
-	bwallNode->rotate(Ogre::Quaternion(Ogre::Degree(90),Ogre::Vector3(1,0,0)));
-    bwallNode->translate(0,0,-700);
-	//ceiling
-    Ogre::MeshManager::getSingleton().createPlane("ceiling",Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,plane,
-1500,1500,20,20,true,1,5,5,Ogre::Vector3::UNIT_Z);
-	Ogre::Entity* ceilingE = mSceneMgr->createEntity("CeilingEntity","ceiling");
-	Ogre::SceneNode* ceilingNode=mSceneMgr->getRootSceneNode()->createChildSceneNode("ceilingNode");
-	ceilingNode->attachObject(ceilingE);
-	ceilingE->setMaterialName("Examples/Rockwall");
-	ceilingE->setCastShadows(false);
-	ceilingNode->rotate(Ogre::Quaternion(Ogre::Degree(180),Ogre::Vector3(1,0,0)));
-    ceilingNode->translate(0,700,0);
+
     //lighting
 	Ogre::Light * light = mSceneMgr->createLight("light1");
-	light->setPosition(Ogre::Vector3(0,500,500));
+    light->setPosition(Ogre::Vector3(0,100,0));
 	light->setDiffuseColour(1.0, 1.0, 1.0);
 	light->setSpecularColour(1.0, 0.0, 0.0);
 }
@@ -152,9 +82,9 @@ void BaseApplication::createCamera(void)
     mCamera = mSceneMgr->createCamera("PlayerCam");
 
     // Position it at 500 in Z direction
-    mCamera->setPosition(Ogre::Vector3(0,0,1800));
+    mCamera->setPosition(Ogre::Vector3(0,0,400));
     // Look back along -Z
-    mCamera->lookAt(Ogre::Vector3(0,0,-300));
+    mCamera->lookAt(Ogre::Vector3(0,0,-200));
     mCamera->setNearClipDistance(5);
 
     mCameraMan = new OgreBites::SdkCameraMan(mCamera);   // create a default camera controller
@@ -437,32 +367,6 @@ bool BaseApplication::keyPressed( const OIS::KeyEvent &arg )
     {
         mShutDown = true;
     }
-    else if (arg.key == OIS::KC_1)
-    {
-        ballspd=0;
-    }
-    else if (arg.key == OIS::KC_2)
-    {
-        ballspd=100;
-    }
-    else if (arg.key == OIS::KC_3)
-    {
-        ballspd=200;
-    }
-    else if (arg.key == OIS::KC_4)
-    {
-        ballspd=400;
-    }
-    else if (arg.key == OIS::KC_5)
-    {
-        ballspd=600;
-    }
-    else if (arg.key == OIS::KC_6)
-    {
-        ballspd=900;
-    }
-    mCameraMan->injectKeyDown(arg);
-    return true;
 }
 
 bool BaseApplication::keyReleased( const OIS::KeyEvent &arg )

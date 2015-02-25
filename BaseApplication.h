@@ -1,25 +1,8 @@
-/*
------------------------------------------------------------------------------
-Filename:    BaseApplication.h
------------------------------------------------------------------------------
-
-This source file is part of the
-   ___                 __    __ _ _    _
-  /___\__ _ _ __ ___  / / /\ \ (_) | _(_)
- //  // _` | '__/ _ \ \ \/  \/ / | |/ / |
-/ \_// (_| | | |  __/  \  /\  /| |   <| |
-\___/ \__, |_|  \___|   \/  \/ |_|_|\_\_|
-      |___/
-      Tutorial Framework
-      http://www.ogre3d.org/tikiwiki/
------------------------------------------------------------------------------
-*/
 #ifndef __BaseApplication_h_
 #define __BaseApplication_h_
 
-//added by me
-#include <time.h>
-#include <OgreStringConverter.h>
+#include "GameObject.h"
+#include "Court.h"
 
 #include <OgreCamera.h>
 #include <OgreEntity.h>

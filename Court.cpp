@@ -1,26 +1,44 @@
 #include "Court.h"
+#include <stdio.h>
 
-/*
-Regulation Court Size: l:w:h 40:20:20 feet (480:240:240 inches)
-*/
+Court::Court(Ogre::SceneManager* smp){
+    //init court vals
+    length=480;
+    width=240;
+    height=240;
+    sceneMgr=smp;
 
-Court::Court(void){
-//create court node
-	rootNode=mSceneMgr->getRootSceneNode()->createChildSceneNode("courtNode");
+    //create court node
+    rootNode=sceneMgr->getRootSceneNode()->createChildSceneNode("courtNode");
+    printf("``````````````````happens\n");
 
-//declare plane
-	Ogre::Plane plane(Ogre::Vector3::UNIT_Y,0);
+    //declare plane
+    plane = Ogre::Plane(Ogre::Vector3::UNIT_Y,0);
 
-//Construct planes, bind nodes
-	//front wall
-	Ogre::MeshManager::getSingleton().createPlane("frontwall",Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,plane,
-240,240,1,1,true,1,5,5,Ogre::Vector3::UNIT_Z);
-	Ogre::Entity* frontE = mSceneMgr->createEntity("FrontWallEntity","frontwall");
-	Ogre::SceneNode* frontN=rootNode->createChildSceneNode("frontwallNode");
-	frontN->attachObject(frontE);	
+    //Construct planes, bind nodes
+        //front wall
+    createPlane("frontwall",width,height,"Court/Front",Ogre::Vector3(0,0,-(length/2)),Ogre::Vector3(1,0,0),90);
+        createPlane("backwall",width,height,"Court/Front",Ogre::Vector3(0,0,(length/2)),Ogre::Vector3(1,0,0),-90);
+        //left wall
+    createPlane("leftwall",height,length,"Court/Front",Ogre::Vector3(-(width/2),0,0),Ogre::Vector3(0,0,1),-90);
+        //right wall
+    createPlane("rightwall",height,length,"Court/Front",Ogre::Vector3((width/2),0,0),Ogre::Vector3(0,0,1),90);
+        //ceiling
+    createPlane("ceiling",height,length,"Court/Front",Ogre::Vector3(0,(height/2),0),Ogre::Vector3(0,0,1),180);
+        //floor
+    createPlane("floor",height,length,"Court/Front",Ogre::Vector3(0,-(height/2),0),Ogre::Vector3(0,0,1),0);
+}
 
-	//frontE->setMaterialName("Examples/Rockwall");
-	frontE->setCastShadows(false);
-	frontE->translate(0,-240,0);
+void Court::createPlane(Ogre::String name, Ogre::Real x, Ogre::Real y, Ogre::String material, Ogre::Vector3 translation, Ogre::Vector3 rotationvector,Ogre::Real degree){
+    Ogre::MeshManager::getSingleton().createPlane(name,Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,plane,
+x,y,10,10,true,1,5,5,Ogre::Vector3::UNIT_Z);
+    Ogre::Entity* entity = sceneMgr->createEntity( name);
+    Ogre::SceneNode* node=rootNode->createChildSceneNode();
+    node->attachObject(entity);
+
+    entity->setMaterialName(material);
+    entity->setCastShadows(true);
+    node->rotate(Ogre::Quaternion(Ogre::Degree(degree),rotationvector));
+    node->translate(translation);
 
 }
