@@ -34,7 +34,7 @@ BaseApplication::~BaseApplication(void)
 void BaseApplication::createScene(void)
 {
     // create your scene
-	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.3f,0.1f,0.3f));
+    mSceneMgr->setAmbientLight(Ogre::ColourValue(.5f,0.45f,0.4f,.3f));
 	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
     //create court
@@ -42,10 +42,14 @@ void BaseApplication::createScene(void)
 
 
     //lighting
+
 	Ogre::Light * light = mSceneMgr->createLight("light1");
-    light->setPosition(Ogre::Vector3(0,100,0));
-	light->setDiffuseColour(1.0, 1.0, 1.0);
-	light->setSpecularColour(1.0, 0.0, 0.0);
+    light->setType(Ogre::Light::LT_POINT);
+    light->setPosition(Ogre::Vector3(0,120,0));
+    light->setDiffuseColour(1.0, 0.95, 0.6);
+    light->setSpecularColour(1.0, 1.0, 1.0);
+    light->setAttenuation(300,.1,.00001,.00004);
+
 }
 
 //-------------------------------------------------------------------------------------
@@ -82,9 +86,9 @@ void BaseApplication::createCamera(void)
     mCamera = mSceneMgr->createCamera("PlayerCam");
 
     // Position it at 500 in Z direction
-    mCamera->setPosition(Ogre::Vector3(0,0,400));
+    mCamera->setPosition(Ogre::Vector3(0,-60,400));
     // Look back along -Z
-    mCamera->lookAt(Ogre::Vector3(0,0,-200));
+    mCamera->lookAt(Ogre::Vector3(0,-60,-200));
     mCamera->setNearClipDistance(5);
 
     mCameraMan = new OgreBites::SdkCameraMan(mCamera);   // create a default camera controller
