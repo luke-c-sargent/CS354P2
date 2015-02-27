@@ -2,7 +2,7 @@ ACLOCAL_AMFLAGS= -I m4
 noinst_HEADERS= BaseApplication.h
 
 bin_PROGRAMS= OgreApp
-OgreApp_SOURCES= BaseApplication.cpp GameObject.cpp Court.cpp GameObject.h Court.h
+OgreApp_SOURCES= BaseApplication.cpp GameObject.cpp Court.cpp Ball.cpp GameObject.h Court.h Ball.h
 OgreApp_CPPFLAGS= -I$(top_srcdir)
 OgreApp_CXXFLAGS= $(OGRE_CFLAGS) $(OIS_CFLAGS)
 OgreApp_LDADD= $(OGRE_LIBS) $(OIS_LIBS)

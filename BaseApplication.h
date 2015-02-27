@@ -3,6 +3,7 @@
 
 #include "GameObject.h"
 #include "Court.h"
+#include "Ball.h"
 
 #include <OgreCamera.h>
 #include <OgreEntity.h>

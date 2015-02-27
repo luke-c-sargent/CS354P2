@@ -1,5 +1,4 @@
 #include "Court.h"
-#include <stdio.h>
 
 Court::Court(Ogre::SceneManager* smp){
     //init court vals

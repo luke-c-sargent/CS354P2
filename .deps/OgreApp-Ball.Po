@@ -1,5 +1,5 @@
-OgreApp-BaseApplication.o: BaseApplication.cpp /usr/include/stdc-predef.h \
- BaseApplication.h GameObject.h /lusr/opt/ogre-1.9/include/OGRE/Ogre.h \
+OgreApp-Ball.o: Ball.cpp /usr/include/stdc-predef.h Ball.h \
+ /lusr/opt/ogre-1.9/include/OGRE/Ogre.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgrePrerequisites.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgrePlatform.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreConfig.h \
@@ -844,66 +844,11 @@ OgreApp-BaseApplication.o: BaseApplication.cpp /usr/include/stdc-predef.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreConvexBody.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreShadowCameraSetupLiSPSM.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreShadowCameraSetupPlaneOptimal.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreShadowCameraSetupPSSM.h Court.h \
- Ball.h /lusr/opt/ogre-1.9/include/OGRE/OgreCamera.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreEntity.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreLogManager.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreRoot.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreViewport.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreSceneManager.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreRenderWindow.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreConfigFile.h \
- /usr/include/ois/OISEvents.h /usr/include/ois/OISPrereqs.h \
- /usr/include/ois/OISConfig.h /usr/include/ois/OISInputManager.h \
- /usr/include/ois/OISKeyboard.h /usr/include/ois/OISObject.h \
- /usr/include/ois/OISInterface.h /usr/include/ois/OISEvents.h \
- /usr/include/ois/OISMouse.h /lusr/opt/ogre-1.9/include/OGRE/SdkTrays.h \
- /lusr/opt/ogre-1.9/include/OGRE/Ogre.h \
- /lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreOverlaySystem.h \
- /lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreOverlay.h \
- /lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreOverlayPrerequisites.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgrePrerequisites.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreSceneNode.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreIteratorWrappers.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreMatrix4.h \
- /lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreOverlayContainer.h \
- /lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreOverlayElement.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreString.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreRenderable.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreUTFString.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreStringInterface.h \
- /lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreOverlayElementCommands.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreColourValue.h \
- /lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreOverlayManager.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreSingleton.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreStringVector.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreScriptLoader.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreFrustum.h \
- /lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreFontManager.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreResourceManager.h \
- /lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreFont.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreResource.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreTexture.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreMaterial.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreCommon.h \
- /lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreBorderPanelOverlayElement.h \
- /lusr/opt/ogre-1.9/include/OGRE/Overlay/OgrePanelOverlayElement.h \
- /lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreTextAreaOverlayElement.h \
- /lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreOverlayElementFactory.h \
- /lusr/opt/ogre-1.9/include/OGRE/OgreRenderQueueListener.h \
- /lusr/opt/ogre-1.9/include/OGRE/InputContext.h /usr/include/ois/OIS.h \
- /usr/include/ois/OISMouse.h /usr/include/ois/OISKeyboard.h \
- /usr/include/ois/OISJoyStick.h /usr/include/ois/OISMultiTouch.h \
- /usr/include/ois/OISInputManager.h /usr/include/ois/OISFactoryCreator.h \
- /usr/include/ois/OISException.h /usr/include/ois/OISEffect.h \
- /usr/include/ois/OISForceFeedback.h \
- /lusr/opt/ogre-1.9/include/OGRE/SdkCameraMan.h
+ /lusr/opt/ogre-1.9/include/OGRE/OgreShadowCameraSetupPSSM.h GameObject.h
 
 /usr/include/stdc-predef.h:
 
-BaseApplication.h:
-
-GameObject.h:
+Ball.h:
 
 /lusr/opt/ogre-1.9/include/OGRE/Ogre.h:
 
@@ -2769,132 +2714,4 @@ GameObject.h:
 
 /lusr/opt/ogre-1.9/include/OGRE/OgreShadowCameraSetupPSSM.h:
 
-Court.h:
-
-Ball.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreCamera.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreEntity.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreLogManager.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreRoot.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreViewport.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreSceneManager.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreRenderWindow.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreConfigFile.h:
-
-/usr/include/ois/OISEvents.h:
-
-/usr/include/ois/OISPrereqs.h:
-
-/usr/include/ois/OISConfig.h:
-
-/usr/include/ois/OISInputManager.h:
-
-/usr/include/ois/OISKeyboard.h:
-
-/usr/include/ois/OISObject.h:
-
-/usr/include/ois/OISInterface.h:
-
-/usr/include/ois/OISEvents.h:
-
-/usr/include/ois/OISMouse.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/SdkTrays.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/Ogre.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreOverlaySystem.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreOverlay.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreOverlayPrerequisites.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgrePrerequisites.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreSceneNode.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreIteratorWrappers.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreMatrix4.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreOverlayContainer.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreOverlayElement.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreString.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreRenderable.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreUTFString.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreStringInterface.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreOverlayElementCommands.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreColourValue.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreOverlayManager.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreSingleton.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreStringVector.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreScriptLoader.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreFrustum.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreFontManager.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreResourceManager.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreFont.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreResource.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreTexture.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreMaterial.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreCommon.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreBorderPanelOverlayElement.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/Overlay/OgrePanelOverlayElement.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreTextAreaOverlayElement.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/Overlay/OgreOverlayElementFactory.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/OgreRenderQueueListener.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/InputContext.h:
-
-/usr/include/ois/OIS.h:
-
-/usr/include/ois/OISMouse.h:
-
-/usr/include/ois/OISKeyboard.h:
-
-/usr/include/ois/OISJoyStick.h:
-
-/usr/include/ois/OISMultiTouch.h:
-
-/usr/include/ois/OISInputManager.h:
-
-/usr/include/ois/OISFactoryCreator.h:
-
-/usr/include/ois/OISException.h:
-
-/usr/include/ois/OISEffect.h:
-
-/usr/include/ois/OISForceFeedback.h:
-
-/lusr/opt/ogre-1.9/include/OGRE/SdkCameraMan.h:
+GameObject.h:

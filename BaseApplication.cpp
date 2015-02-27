@@ -39,7 +39,7 @@ void BaseApplication::createScene(void)
 
     //create court
     Court * court = new Court(mSceneMgr);
-
+    Ball * ball = new Ball(mSceneMgr);
 
     //lighting
 

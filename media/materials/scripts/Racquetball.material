@@ -71,3 +71,18 @@ material Court/Ceiling
 		}
 	}
 }
+material Ball
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture ball.png
+				env_map spherical
+			}
+			shading phong
+		}
+	}
+}
