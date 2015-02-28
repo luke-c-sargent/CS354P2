@@ -4,6 +4,7 @@
 #include "GameObject.h"
 #include "Court.h"
 #include "Ball.h"
+#include "Player.h"
 
 #include <OgreCamera.h>
 #include <OgreEntity.h>
@@ -53,6 +54,7 @@ protected:
     bool mouseMoved( const OIS::MouseEvent &arg );
     bool mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
     bool mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
+    bool processUnbufferedInput(const Ogre::FrameEvent& evt);
 
     // Ogre::WindowEventListener
     //Adjust mouse clipping area
@@ -89,6 +91,7 @@ protected:
     Ogre::Real ballspd;
     Ogre::Real ballr;
     Ogre::Real roomsize;
+    Player * player;
 };
 
 #endif // #ifndef __BaseApplication_h_

@@ -15,14 +15,15 @@ protected:
 	Ogre::SceneNode* floornode;
 	Ogre::SceneNode* ceilingnode;
 
+
+
+public:
+    Court(Ogre::SceneManager * smp);
     //dimensions - 1 unit = 1 inch
     Ogre::Real length;
     Ogre::Real width;
     Ogre::Real height;
-
-public:
-    Court(Ogre::SceneManager * smp);
-
+	Ogre::Real goalline;
     void createPlane(Ogre::String name, Ogre::Real x, Ogre::Real y, Ogre::String material, Ogre::Vector3 translation, Ogre::Vector3 rotationvector,Ogre::Real degree);
 
 };

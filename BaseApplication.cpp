@@ -40,7 +40,11 @@ void BaseApplication::createScene(void)
     //create elements
     Court * court = new Court(mSceneMgr);
     Ball * ball = new Ball(mSceneMgr);
-
+    player = new Player(mSceneMgr);
+	
+	mSceneMgr->getSceneNode("PlayerNode")->translate(player->pos);
+	
+	
     //lighting
 
 	Ogre::Light * light = mSceneMgr->createLight("light1");
@@ -254,7 +258,7 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
     if(mShutDown)
         return false;
-
+	
     //Need to capture/update each device
     mKeyboard->capture();
     mMouse->capture();
@@ -274,8 +278,10 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
             mDetailsPanel->setParamValue(6, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().y));
             mDetailsPanel->setParamValue(7, Ogre::StringConverter::toString(mCamera->getDerivedOrientation().z));
         }
+    
     }
-
+	processUnbufferedInput(evt);
+    
     //Ogre::LogManager::getSingletonPtr()->logMessage(Ogre::StringConverter::toString(mouseloc));
 
 
@@ -284,6 +290,7 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 //-------------------------------------------------------------------------------------
 bool BaseApplication::keyPressed( const OIS::KeyEvent &arg )
 {
+
     if (mTrayMgr->isDialogVisible()) return true;   // don't process any more keys if dialog is up
 
     if (arg.key == OIS::KC_F)   // toggle visibility of advanced frame stats
@@ -372,6 +379,36 @@ bool BaseApplication::keyPressed( const OIS::KeyEvent &arg )
         mShutDown = true;
     }
 }
+bool BaseApplication::processUnbufferedInput(const Ogre::FrameEvent& evt)
+{	
+	static Ogre::Real mMove = 250;      // The movement constant
+	Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
+	Ogre::SceneNode * pNode = mSceneMgr->getSceneNode("PlayerNode");
+	
+    if (mKeyboard->isKeyDown(OIS::KC_A) and player->pos.x > -120 + player->radius) // left
+	{
+		transVector.x += -mMove;
+	}
+	else{}
+	if (mKeyboard->isKeyDown(OIS::KC_D) and player->pos.x < 120 - player->radius) // right
+	{
+		transVector.x += mMove;
+	}
+	else{}
+	if (mKeyboard->isKeyDown(OIS::KC_W) and player->pos.z > 40 + player->radius) // Up
+	{
+		transVector.z += -mMove;
+	}
+	else{}
+	if (mKeyboard->isKeyDown(OIS::KC_S) and player->pos.z < 240 - player->radius) // Down
+	{
+		transVector.z += mMove;
+	}
+	else{}
+	player->pos = player->pos + (transVector * evt.timeSinceLastFrame);
+    pNode->translate(transVector * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
+}
+
 
 bool BaseApplication::keyReleased( const OIS::KeyEvent &arg )
 {

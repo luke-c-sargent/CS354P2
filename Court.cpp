@@ -5,6 +5,7 @@ Court::Court(Ogre::SceneManager* smp){
     length=480;
     width=240;
     height=240;
+    goalline=180;
     sceneMgr=smp;
 
     //create court node

@@ -845,7 +845,7 @@ OgreApp-BaseApplication.o: BaseApplication.cpp /usr/include/stdc-predef.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreShadowCameraSetupLiSPSM.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreShadowCameraSetupPlaneOptimal.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreShadowCameraSetupPSSM.h Court.h \
- Ball.h /lusr/opt/ogre-1.9/include/OGRE/OgreCamera.h \
+ Ball.h Player.h /lusr/opt/ogre-1.9/include/OGRE/OgreCamera.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreEntity.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreLogManager.h \
  /lusr/opt/ogre-1.9/include/OGRE/OgreRoot.h \
@@ -2772,6 +2772,8 @@ GameObject.h:
 Court.h:
 
 Ball.h:
+
+Player.h:
 
 /lusr/opt/ogre-1.9/include/OGRE/OgreCamera.h:
 
