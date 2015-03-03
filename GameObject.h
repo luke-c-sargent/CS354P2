@@ -1,10 +1,10 @@
 #pragma once
 
 #include <Ogre.h>
-//#include "Simulator.h"
-//class OgreMotionState;
+#include "Simulator.h"
+#include "BulletContactCallback.h"
 
- 
+class OgreMotionState;
 
 class GameObject {
 protected:
@@ -12,8 +12,8 @@ protected:
     Ogre::SceneManager* sceneMgr;
     Ogre::SceneNode* rootNode;
     Ogre::Entity* geom;
-//    OgreMotionState* motionState;
-/*
+    OgreMotionState* motionState;
+
     Simulator* simulator;
     btCollisionShape* shape;
     btRigidBody* body;
@@ -26,7 +26,15 @@ protected:
     bool kinematic;
     bool needsUpdates;
 
-    CollisionContext* context;
+    float lastTime;
+    float elapsedTime;
+
+public:
     BulletContactCallback* cCallBack;
-    */
+    CollisionContext* context;
+    void checkCollisions(bool check);
+    void addToSimulator();
+    bool doUpdates();
+    void update(float elapsedTime);
+    btRigidBody* getBody();
 };

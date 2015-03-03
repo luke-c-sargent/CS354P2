@@ -9,7 +9,10 @@ protected:
     Ogre::Real radius;
     //physics
     Ogre::Real restcoef;
+    //wat
+    float lastTime;
 
 public:
     Ball(Ogre::SceneManager* smp);
+    void update(float elapsedTime);
 };
