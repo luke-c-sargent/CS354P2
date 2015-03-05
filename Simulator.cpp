@@ -1,5 +1,6 @@
 #include "Simulator.h"
 #include "GameObject.h"
+#include <stdio.h>
 
 Simulator::Simulator(){
     ///collision configuration contains default setup for memory, collision setup.

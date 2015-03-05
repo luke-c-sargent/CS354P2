@@ -5,6 +5,7 @@
 #include "Court.h"
 #include "Ball.h"
 #include "Player.h"
+#include "Simulator.h"
 
 #include <OgreCamera.h>
 #include <OgreEntity.h>
@@ -84,6 +85,9 @@ protected:
 
     //mouse location-unused
     //Ogre::Vector2 mouseloc;
+
+    //simulator
+    Simulator* sim;
 
     //ball mechanics
     Ogre::SceneNode* ballNode;

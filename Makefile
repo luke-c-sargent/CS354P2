@@ -108,6 +108,7 @@ am_OgreApp_OBJECTS = OgreApp-Ball.$(OBJEXT) \
 OgreApp_OBJECTS = $(am_OgreApp_OBJECTS)
 am__DEPENDENCIES_1 =
 OgreApp_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
@@ -227,6 +228,10 @@ BULLET_CFLAGS =
 BULLET_LIBS = 
 CC = gcc
 CCDEPMODE = depmode=gcc3
+CEGUI_CFLAGS = -I/lusr/opt/cegui-0.8.4/include/cegui-0  
+CEGUI_LIBS = -L/lusr/opt/cegui-0.8.4/lib -lCEGUIBase-0  
+CEGUI_OGRE_CFLAGS = -pthread -I/lusr/opt/ogre-1.9/include -I/lusr/opt/ogre-1.9/include/OGRE -I/lusr/opt/cegui-0.8.4/include/cegui-0  
+CEGUI_OGRE_LIBS = -L/lusr/opt/ogre-1.9/lib -L/lusr/opt/cegui-0.8.4/lib -lCEGUIOgreRenderer-0 -lOgreMain -lpthread -lCEGUIBase-0  
 CFLAGS = -g -O2
 CPP = gcc -E
 CPPFLAGS = 

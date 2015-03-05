@@ -3,7 +3,7 @@
 #include <Ogre.h>
 #include <GameObject.h>
 
-class Ball:GameObject{
+class Ball:public GameObject{
 protected:
     //geometry
     Ogre::Real radius;
@@ -14,5 +14,5 @@ protected:
 
 public:
     Ball(Ogre::SceneManager* smp);
-    void update(float elapsedTime);
+    //void update(float elapsedTime);
 };

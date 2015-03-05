@@ -94,7 +94,6 @@ material PlayerWire
 			texture_unit
 			{
 				texture wireframe.png
-				env_map spherical
 			}
 			shading phong
 		}

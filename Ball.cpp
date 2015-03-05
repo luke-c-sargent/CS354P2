@@ -1,4 +1,6 @@
 #include "Ball.h"
+#include "OgreMotionState.h"
+#include <stdio.h>
 
 //constructor
 Ball::Ball(Ogre::SceneManager* smp){
@@ -6,6 +8,7 @@ Ball::Ball(Ogre::SceneManager* smp){
     radius=6;//a diameter of a foot; this is a test value
     lastTime=0.0f;
     sceneMgr=smp;
+
     rootNode=sceneMgr->getRootSceneNode()->createChildSceneNode("ballNode");
     Ogre::Entity * entity=sceneMgr->createEntity("ball","sphere.mesh");
     rootNode->attachObject(entity);
@@ -15,17 +18,31 @@ Ball::Ball(Ogre::SceneManager* smp){
     Ogre::Real scalefactor = Ogre::Real(radius/100.f);
     rootNode->scale(scalefactor,scalefactor,scalefactor);
 
+    //tentative bt values
+    shape = new btSphereShape(6.0f);
+    tr= *(new btTransform());
+    inertia= *(new btVector3(0.0f,0.0f,0.0f));
+    mass=10.0f;
+    restitution=0.835f;
+    friction=1.0f;
+    motionState = new OgreMotionState(tr,rootNode);
+    body = new btRigidBody(mass,motionState,shape,inertia);
+
+
 }
 
+/*
 void Ball::update(float elapsedTime) {
     lastTime += elapsedTime;
     simulator->getWorld()->contactTest(body, *cCallBack);
+
     if (context->hit && (context->velNorm > 2.0 || context->velNorm < -2.0)
         && (lastTime > 0.5 || (context->lastBody != context->body && lastTime > 0.1))) {
-        /*
+
         if (context->theObject->getName() == "Player") soundMgr->playClip(punchClip);
-        else soundMgr->playClip(bounceClip);*/
+        else soundMgr->playClip(bounceClip);
         lastTime = 0.0f;
     }
     context->hit = false;
 }
+*/

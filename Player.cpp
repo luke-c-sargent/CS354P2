@@ -10,7 +10,6 @@ Player::Player(Ogre::SceneManager* smp){
     rootNode->attachObject(entity);
     entity->setCastShadows(true);
     entity->setMaterialName("Ball");
-    //ogre sphere.mesh has radius 100;
     Ogre::Real scalefactor = Ogre::Real(radius/100.f);
     rootNode->scale(scalefactor*4,scalefactor*4,scalefactor*4);
 }

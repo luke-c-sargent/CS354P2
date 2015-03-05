@@ -3,7 +3,7 @@
 #include <Ogre.h>
 #include <GameObject.h>
 
-class Court:GameObject{
+class Court:public GameObject{
 protected:
     //geometry
     Ogre::Plane plane;

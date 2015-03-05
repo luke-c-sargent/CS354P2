@@ -37,12 +37,19 @@ void BaseApplication::createScene(void)
     mSceneMgr->setAmbientLight(Ogre::ColourValue(.5f,0.45f,0.4f,.3f));
 	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
+
     //create elements
     Court * court = new Court(mSceneMgr);
     Ball * ball = new Ball(mSceneMgr);
     player = new Player(mSceneMgr);
-	
-	mSceneMgr->getSceneNode("PlayerNode")->translate(player->pos);
+
+    //create sim
+    /* */
+    sim = new Simulator();
+    sim->addObject(ball);
+    //sim->addObject(court);
+
+    mSceneMgr->getSceneNode("PlayerNode")->translate(player->pos);
 	
 	
     //lighting
@@ -280,8 +287,12 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
         }
     
     }
-	processUnbufferedInput(evt);
+    processUnbufferedInput(evt);
     
+    //simulator step
+    sim->stepSimulation(evt.timeSinceLastFrame,1,1./60.);
+
+
     //Ogre::LogManager::getSingletonPtr()->logMessage(Ogre::StringConverter::toString(mouseloc));
 
 

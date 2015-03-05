@@ -35,6 +35,11 @@ bool GameObject::doUpdates(){
 void GameObject::update(float elapsedTime) {
     lastTime += elapsedTime;
     simulator->getWorld()->contactTest(body, *cCallBack);
+
+    //DEBUG
+    printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+    printf("%s\n", needsUpdates ? "true" : "false");
+
     if (context->hit && (context->velNorm > 2.0 || context->velNorm < -2.0)
         && (lastTime > 0.5 || (context->lastBody != context->body && lastTime > 0.1))) {
         /*
