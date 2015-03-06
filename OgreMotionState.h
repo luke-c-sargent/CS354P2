@@ -34,4 +34,8 @@ void updateTransform(btTransform& newpos) {
     mVisibleobj->setPosition(pos.x(), pos.y()+5, pos.z()-5);
 }
 
+btTransform getPos(){
+    return mPos1;
+}
+
 };

@@ -34,12 +34,11 @@ Ball::Ball(Ogre::SceneManager* smp){
     shape->calculateLocalInertia(mass,inertia);
 
     //inertia= *(new btVector3(0.0f,0.0f,0.0f));
-    mass=100.0f;
+    mass=1.0f;
     restitution=0.835f;
     friction=0.5f;
     motionState = new OgreMotionState(tr,rootNode);
     body = new btRigidBody(mass,motionState,shape,inertia);
-
 
 }
 

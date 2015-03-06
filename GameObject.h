@@ -42,4 +42,7 @@ public:
     btRigidBody* getBody();
     void setSimulator(Simulator* insim);
     void printpos();
+    Ogre::SceneNode* getNode();
+    Ogre::String getName();
+    OgreMotionState * getMotionState();
 };

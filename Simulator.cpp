@@ -1,5 +1,6 @@
 #include "Simulator.h"
 #include "GameObject.h"
+#include "OgreMotionState.h"
 #include <stdio.h>
 
 using std::cout;
@@ -14,27 +15,39 @@ Simulator::Simulator(){
    ///the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
    solver = new btSequentialImpulseConstraintSolver();
    dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,overlappingPairCache,solver,collisionConfiguration);
-   dynamicsWorld->setGravity(btVector3(0,-10, 0));
+   dynamicsWorld->setGravity(btVector3(0,-386, 0));//386.09 inches/s^2 = 9.8m/s^2
    //keep track of the shapes, we release memory at exit.
    //make sure to re-use collision shapes among rigid bodies whenever possible!
    btAlignedObjectArray<btCollisionShape*> collisionShapes;
 }
 
-void Simulator::stepSimulation(const Ogre::Real elapsedTime, int maxSubSteps, const Ogre::Real fixedTimestep) {/*
+void Simulator::stepSimulation(const Ogre::Real elapsedTime, int maxSubSteps, const Ogre::Real fixedTimestep) {
     for (int i = 0; i != objList.size(); i++) idList[i] = 0;
     dynamicsWorld->stepSimulation(elapsedTime, maxSubSteps, fixedTimestep);
     for (unsigned int i = 0; i < objList.size(); i++){
         if (objList[i]->doUpdates()){
-            checkHit(i);
+            //checkHit(i);
             objList[i]->update(elapsedTime);
         }
     }
-    btTransform tr;
-    objList[0]->getBody()->getMotionState()->getWorldTransform(tr);
-    cout << "sphere height: " << tr.getOrigin().getY() << std::endl;
-    //objList[0]->printpos();
-    */
+    //*/
+    //Ogre::Vector3 pos= objList[0]->getNode()->getPosition();
+    btVector3 bv=objList[0]->getBody()->getLinearVelocity();
+    OgreMotionState *ms = objList[0]->getMotionState();
+    btTransform newpos = ms->getPos();
+    cout << bv.y()<<"\n";
+
+/*
+    if(pos.y<-114){
+        cout <<"THIS\n";
+        objList[0]->getNode()->translate(0,10,0);
+    }
+            */
     dynamicsWorld->stepSimulation(elapsedTime, fixedTimestep);
+    //btTransform trans;
+    //btScalar yv=objList[0]->context->velocity.getY();
+//    Ogre::Vector3 pos= objList[0]->getNode()->getPosition();
+    //cout <<objList[0]->getName() << "Y: " << pos.y << std::endl;
 }
 
 bool Simulator::checkHit(int o) {

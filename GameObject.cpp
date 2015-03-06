@@ -40,26 +40,18 @@ bool GameObject::doUpdates(){
 void GameObject::update(float elapsedTime) {
     //check collisions added here by me
     checkCollisions(true);
-/*
-    //\/PROBLEEMMMM
-    if (!simulator) {
-        printf("Halp! Simulator is NULL!");
-    }
-    assert(simulator != 0);
-    assert(simulator->getWorld() != 0);
-    if (!simulator->getWorld()) {
-        printf("Halp! simulator->getWorld() is NULL!");
-    }
-    */
+
     simulator->getWorld()->contactTest(body, *cCallBack);
 
 
 
-    if(context->hit)
-        cout<<"!!!!!!!!!!!!HIT HIT HIT!?!!!!!!!!\n";
+    if(context->hit){}
+    //    cout<<"!!!!!!!!!!!!HIT HIT HIT!?!!!!!!!!\n";
+        //rootNode->translate(0,10,0);
 
     if (context->hit && (context->velNorm > 2.0 || context->velNorm < -2.0)
         && (lastTime > 0.5 || (context->lastBody != context->body && lastTime > 0.1))) {
+        cout << "this happens\n";
         /*
         if (context->theObject->getName() == "Player") soundMgr->playClip(punchClip);
         else soundMgr->playClip(bounceClip);*/
@@ -81,4 +73,15 @@ btRigidBody* GameObject::getBody(){
 
 void GameObject::printpos(){
     cout << "{"<< position.x()<<","<< position.y()<<","<< position.z()<<"}\n";
+}
+
+Ogre::SceneNode* GameObject::getNode(){
+    return rootNode;
+}
+Ogre::String GameObject::getName(){
+    return name;
+}
+
+OgreMotionState * GameObject::getMotionState(){
+    return motionState;
 }

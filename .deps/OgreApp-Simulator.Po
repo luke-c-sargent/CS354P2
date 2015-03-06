@@ -975,7 +975,7 @@ OgreApp-Simulator.o: Simulator.cpp /usr/include/stdc-predef.h Simulator.h \
  /usr/include/bullet/BulletDynamics/Vehicle/btWheelInfo.h \
  /usr/include/bullet/BulletDynamics/Dynamics/btActionInterface.h \
  /usr/include/bullet/BulletDynamics/Dynamics/btRigidBody.h GameObject.h \
- BulletContactCallback.h
+ BulletContactCallback.h OgreMotionState.h
 
 /usr/include/stdc-predef.h:
 
@@ -3110,3 +3110,5 @@ Simulator.h:
 GameObject.h:
 
 BulletContactCallback.h:
+
+OgreMotionState.h:

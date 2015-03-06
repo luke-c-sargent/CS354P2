@@ -35,6 +35,9 @@ BaseApplication::~BaseApplication(void)
 
 void BaseApplication::createScene(void)
 {
+    //init sim
+    sim = new Simulator();
+
     // create your scene
     mSceneMgr->setAmbientLight(Ogre::ColourValue(.5f,0.45f,0.4f,.3f));
 	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
@@ -50,6 +53,22 @@ void BaseApplication::createScene(void)
     /* */
     sim->addObject(ball);
     //sim->addObject(court);
+
+    btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
+    btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, -126, 0)));
+    btRigidBody::btRigidBodyConstructionInfo                  groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));
+    groundRigidBodyCI.m_restitution=1.0;
+
+    btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
+    sim->getWorld()->addRigidBody(groundRigidBody);
+
+
+    btTransform trans;
+    groundRigidBody->getMotionState()->getWorldTransform(trans);
+
+
+
+    cout << "rigidbodyheight="<<trans.getOrigin().getY()<<"\n";
 
     mSceneMgr->getSceneNode("PlayerNode")->translate(player->pos);
 	
@@ -239,7 +258,6 @@ void BaseApplication::go(void)
 bool BaseApplication::setup(void)
 {
     mRoot = new Ogre::Root(mPluginsCfg);
-    sim = new Simulator();
 
     setupResources();
 
@@ -298,7 +316,7 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
     processUnbufferedInput(evt);
     
     //simulator step
-    sim->stepSimulation(evt.timeSinceLastFrame,1,1./60.);
+    sim->stepSimulation(evt.timeSinceLastFrame,10,1./60.);
 
 
     //Ogre::LogManager::getSingletonPtr()->logMessage(Ogre::StringConverter::toString(mouseloc));
