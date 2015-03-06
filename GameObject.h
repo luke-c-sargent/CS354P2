@@ -20,6 +20,9 @@ protected:
     btTransform tr;
     btVector3 inertia;
 
+    btVector3 position;
+    btVector3 rotation;
+
     btScalar mass;
     btScalar restitution;
     btScalar friction;
@@ -37,4 +40,6 @@ public:
     bool doUpdates();
     void update(float elapsedTime);
     btRigidBody* getBody();
+    void setSimulator(Simulator* insim);
+    void printpos();
 };

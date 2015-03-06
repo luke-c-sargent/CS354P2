@@ -1,5 +1,7 @@
 #include "BaseApplication.h"
 
+using std::cout;
+
 //-------------------------------------------------------------------------------------
 BaseApplication::BaseApplication(void)
     : mRoot(0),
@@ -41,11 +43,11 @@ void BaseApplication::createScene(void)
     //create elements
     Court * court = new Court(mSceneMgr);
     Ball * ball = new Ball(mSceneMgr);
+    ball->setSimulator(sim);
     player = new Player(mSceneMgr);
 
     //create sim
     /* */
-    sim = new Simulator();
     sim->addObject(ball);
     //sim->addObject(court);
 
@@ -60,6 +62,11 @@ void BaseApplication::createScene(void)
     light->setDiffuseColour(1.0, 0.95, 0.6);
     light->setSpecularColour(1.0, 1.0, 1.0);
     light->setAttenuation(300,.1,.00001,.00004);
+
+    SoundEffects *sounds = new SoundEffects();
+    sounds->init();
+    sounds->load_files();
+    sounds->playMusic();
 
 }
 
@@ -97,9 +104,9 @@ void BaseApplication::createCamera(void)
     mCamera = mSceneMgr->createCamera("PlayerCam");
 
     // Position it at 500 in Z direction
-    mCamera->setPosition(Ogre::Vector3(0,-60,400));
+    mCamera->setPosition(Ogre::Vector3(0,0,400));
     // Look back along -Z
-    mCamera->lookAt(Ogre::Vector3(0,-60,-200));
+    mCamera->lookAt(Ogre::Vector3(0,0,-200));
     mCamera->setNearClipDistance(5);
 
     mCameraMan = new OgreBites::SdkCameraMan(mCamera);   // create a default camera controller
@@ -232,6 +239,7 @@ void BaseApplication::go(void)
 bool BaseApplication::setup(void)
 {
     mRoot = new Ogre::Root(mPluginsCfg);
+    sim = new Simulator();
 
     setupResources();
 

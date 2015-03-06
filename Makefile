@@ -104,7 +104,7 @@ am_OgreApp_OBJECTS = OgreApp-Ball.$(OBJEXT) \
 	OgreApp-BaseApplication.$(OBJEXT) OgreApp-Court.$(OBJEXT) \
 	OgreApp-Game.$(OBJEXT) OgreApp-GameObject.$(OBJEXT) \
 	OgreApp-OgreMotionState.$(OBJEXT) OgreApp-Player.$(OBJEXT) \
-	OgreApp-Simulator.$(OBJEXT)
+	OgreApp-Simulator.$(OBJEXT) OgreApp-SoundEffects.$(OBJEXT)
 OgreApp_OBJECTS = $(am_OgreApp_OBJECTS)
 am__DEPENDENCIES_1 =
 OgreApp_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
@@ -356,11 +356,11 @@ top_builddir = .
 top_srcdir = .
 ACLOCAL_AMFLAGS = -I m4
 noinst_HEADERS = BaseApplication.h
-OgreApp_SOURCES = Ball.cpp BaseApplication.cpp Court.cpp Game.cpp GameObject.cpp OgreMotionState.cpp Player.cpp Simulator.cpp Ball.h BulletContactCallback.h config.h Court.h Game.h GameObject.h OgreMotionState.h Player.h Simulator.h
+OgreApp_SOURCES = Ball.cpp BaseApplication.cpp Court.cpp Game.cpp GameObject.cpp OgreMotionState.cpp Player.cpp Simulator.cpp SoundEffects.cpp Ball.h BulletContactCallback.h config.h Court.h Game.h GameObject.h OgreMotionState.h Player.h Simulator.h SoundEffects.h
 OgreApp_CPPFLAGS = -I$(top_srcdir)
 OgreApp_CXXFLAGS = $(OGRE_CFLAGS) $(OIS_CFLAGS) $(bullet_CFLAGS) $(CEGUI_CFLAGS) $(CEGUI_OGRE_CFLAGS) $(sdl_CFLAGS)
 OgreApp_LDADD = $(OGRE_LIBS) $(OIS_LIBS) $(bullet_LIBS) $(CEGUI_LIBS) $(CEGUI_OGRE_LIBS) $(sdl_LIBS)
-OgreApp_LDFLAGS = -lOgreOverlay -lboost_system 
+OgreApp_LDFLAGS = -lOgreOverlay -lboost_system -lSDL_mixer
 EXTRA_DIST = buildit makeit
 AUTOMAKE_OPTIONS = foreign
 all: config.h
@@ -485,6 +485,7 @@ include ./$(DEPDIR)/OgreApp-GameObject.Po
 include ./$(DEPDIR)/OgreApp-OgreMotionState.Po
 include ./$(DEPDIR)/OgreApp-Player.Po
 include ./$(DEPDIR)/OgreApp-Simulator.Po
+include ./$(DEPDIR)/OgreApp-SoundEffects.Po
 
 .cpp.o:
 	$(AM_V_CXX)$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -618,6 +619,20 @@ OgreApp-Simulator.obj: Simulator.cpp
 #	$(AM_V_CXX)source='Simulator.cpp' object='OgreApp-Simulator.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-Simulator.obj `if test -f 'Simulator.cpp'; then $(CYGPATH_W) 'Simulator.cpp'; else $(CYGPATH_W) '$(srcdir)/Simulator.cpp'; fi`
+
+OgreApp-SoundEffects.o: SoundEffects.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -MT OgreApp-SoundEffects.o -MD -MP -MF $(DEPDIR)/OgreApp-SoundEffects.Tpo -c -o OgreApp-SoundEffects.o `test -f 'SoundEffects.cpp' || echo '$(srcdir)/'`SoundEffects.cpp
+	$(AM_V_at)$(am__mv) $(DEPDIR)/OgreApp-SoundEffects.Tpo $(DEPDIR)/OgreApp-SoundEffects.Po
+#	$(AM_V_CXX)source='SoundEffects.cpp' object='OgreApp-SoundEffects.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-SoundEffects.o `test -f 'SoundEffects.cpp' || echo '$(srcdir)/'`SoundEffects.cpp
+
+OgreApp-SoundEffects.obj: SoundEffects.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -MT OgreApp-SoundEffects.obj -MD -MP -MF $(DEPDIR)/OgreApp-SoundEffects.Tpo -c -o OgreApp-SoundEffects.obj `if test -f 'SoundEffects.cpp'; then $(CYGPATH_W) 'SoundEffects.cpp'; else $(CYGPATH_W) '$(srcdir)/SoundEffects.cpp'; fi`
+	$(AM_V_at)$(am__mv) $(DEPDIR)/OgreApp-SoundEffects.Tpo $(DEPDIR)/OgreApp-SoundEffects.Po
+#	$(AM_V_CXX)source='SoundEffects.cpp' object='OgreApp-SoundEffects.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-SoundEffects.obj `if test -f 'SoundEffects.cpp'; then $(CYGPATH_W) 'SoundEffects.cpp'; else $(CYGPATH_W) '$(srcdir)/SoundEffects.cpp'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

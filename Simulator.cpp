@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include <stdio.h>
 
+using std::cout;
+
 Simulator::Simulator(){
     ///collision configuration contains default setup for memory, collision setup.
    collisionConfiguration = new btDefaultCollisionConfiguration();
@@ -12,18 +14,27 @@ Simulator::Simulator(){
    ///the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
    solver = new btSequentialImpulseConstraintSolver();
    dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,overlappingPairCache,solver,collisionConfiguration);
-   dynamicsWorld->setGravity(btVector3(0,-0.098, 0));
+   dynamicsWorld->setGravity(btVector3(0,-10, 0));
    //keep track of the shapes, we release memory at exit.
    //make sure to re-use collision shapes among rigid bodies whenever possible!
    btAlignedObjectArray<btCollisionShape*> collisionShapes;
 }
 
-void Simulator::stepSimulation(const Ogre::Real elapsedTime, int maxSubSteps, const Ogre::Real fixedTimestep) {
+void Simulator::stepSimulation(const Ogre::Real elapsedTime, int maxSubSteps, const Ogre::Real fixedTimestep) {/*
     for (int i = 0; i != objList.size(); i++) idList[i] = 0;
     dynamicsWorld->stepSimulation(elapsedTime, maxSubSteps, fixedTimestep);
-    for (unsigned int i = 0; i < objList.size(); i++)
-        //if (objList[i].gObject->doUpdates()) objList[i].gObject->update(elapsedTime);
-        if (objList[i]->doUpdates()) objList[i]->update(elapsedTime);
+    for (unsigned int i = 0; i < objList.size(); i++){
+        if (objList[i]->doUpdates()){
+            checkHit(i);
+            objList[i]->update(elapsedTime);
+        }
+    }
+    btTransform tr;
+    objList[0]->getBody()->getMotionState()->getWorldTransform(tr);
+    cout << "sphere height: " << tr.getOrigin().getY() << std::endl;
+    //objList[0]->printpos();
+    */
+    dynamicsWorld->stepSimulation(elapsedTime, fixedTimestep);
 }
 
 bool Simulator::checkHit(int o) {

@@ -9,6 +9,13 @@ Ball::Ball(Ogre::SceneManager* smp){
     lastTime=0.0f;
     sceneMgr=smp;
 
+    name = "Ball";
+
+    position = *(new btVector3(0,0,0));
+    rotation = *(new btVector3(0,0,0));
+
+    needsUpdates=true;
+
     rootNode=sceneMgr->getRootSceneNode()->createChildSceneNode("ballNode");
     Ogre::Entity * entity=sceneMgr->createEntity("ball","sphere.mesh");
     rootNode->attachObject(entity);
@@ -20,11 +27,16 @@ Ball::Ball(Ogre::SceneManager* smp){
 
     //tentative bt values
     shape = new btSphereShape(6.0f);
-    tr= *(new btTransform());
-    inertia= *(new btVector3(0.0f,0.0f,0.0f));
-    mass=10.0f;
+    btQuaternion rotation;
+    rotation.setEulerZYX(rotation.z(),rotation.y(),rotation.x());
+
+    tr= *(new btTransform(rotation,position));
+    shape->calculateLocalInertia(mass,inertia);
+
+    //inertia= *(new btVector3(0.0f,0.0f,0.0f));
+    mass=100.0f;
     restitution=0.835f;
-    friction=1.0f;
+    friction=0.5f;
     motionState = new OgreMotionState(tr,rootNode);
     body = new btRigidBody(mass,motionState,shape,inertia);
 

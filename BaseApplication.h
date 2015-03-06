@@ -6,6 +6,7 @@
 #include "Ball.h"
 #include "Player.h"
 #include "Simulator.h"
+#include "SoundEffects.h"
 
 #include <OgreCamera.h>
 #include <OgreEntity.h>
