@@ -1,5 +1,5 @@
 #include "BaseApplication.h"
-
+#include <boost/lexical_cast.hpp>
 using std::cout;
 
 //-------------------------------------------------------------------------------------
@@ -54,15 +54,34 @@ void BaseApplication::createScene(void)
 	CEGUI::Scheme::setDefaultResourceGroup("Schemes");
 	CEGUI::WidgetLookManager::setDefaultResourceGroup("LookNFeel");
 	CEGUI::WindowManager::setDefaultResourceGroup("Layouts");
-	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-	CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
-	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
 
 	CEGUI::SchemeManager::getSingleton().createFromFile("TaharezLook.scheme");
-    //CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor()									.setDefaultImage("TaharezLook/MouseArrow");
 	
-	CEGUI::Window *guiRoot = CEGUI::WindowManager::getSingleton().loadLayoutFromFile("scoreboard.layout"); 
-	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(guiRoot);
+	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
+	CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
+	
+	score = wmgr.createWindow("TaharezLook/Button", "CEGUIDemo/Score");
+	bounces = wmgr.createWindow("TaharezLook/Button", "CEGUIDemo/bounce");
+	time = wmgr.createWindow("TaharezLook/Button", "CEGUIDemo/time");
+	
+	
+	scoret = 0;
+	timet = 0;
+	bouncest = 0;
+	
+	score->setText("score: ");
+	score->setSize(CEGUI::USize(CEGUI::UDim(0.25, 0), CEGUI::UDim(0.05, 0)));
+	score->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f, 0),CEGUI::UDim(0.0f, 0)));
+	bounces->setText("bounces: ");
+	bounces->setSize(CEGUI::USize(CEGUI::UDim(0.25, 0), CEGUI::UDim(0.05, 0)));
+	bounces->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f, 0),CEGUI::UDim(0.05f, 0)));
+	time->setText("time: ");
+	time->setSize(CEGUI::USize(CEGUI::UDim(0.25, 0), CEGUI::UDim(0.05, 0)));
+	time->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f, 0),CEGUI::UDim(0.1f, 0)));
+	sheet->addChild(score);
+	sheet->addChild(bounces);
+	sheet->addChild(time);
+	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
 
     //create elements
     Court * court = new Court(mSceneMgr);
@@ -352,7 +371,17 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
     
     //simulator step
     sim->stepSimulation(evt.timeSinceLastFrame,10,1./60.);
-
+	
+	timet++;
+	
+	std::string str = boost::lexical_cast<std::string>(scoret);
+	std::string str2 = boost::lexical_cast<std::string>(bouncest);
+	std::string str3 = boost::lexical_cast<std::string>(timet);
+	
+	score->setText("score: " + str);
+	bounces->setText("bounces: " + str2);
+	time->setText("tics: " + str3);
+	
     return true;
 }
 //-------------------------------------------------------------------------------------

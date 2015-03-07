@@ -8,6 +8,8 @@
 #include "Simulator.h"
 #include "SoundEffects.h"
 
+
+
 #include <OgreCamera.h>
 #include <OgreEntity.h>
 #include <OgreLogManager.h>
@@ -33,8 +35,8 @@ class BaseApplication : public Ogre::FrameListener, public Ogre::WindowEventList
 public:
     BaseApplication(void);
     ~BaseApplication(void);
-
     void go(void);
+    int bouncest;
 
 protected:
     bool setup();
@@ -48,7 +50,11 @@ protected:
     void setupResources(void);
     void createResourceListener(void);
     void loadResources(void);
-
+	CEGUI::Window *score;
+	CEGUI::Window *bounces;
+	CEGUI::Window *time;
+	int scoret;
+	int timet;
     //keys
     bool up,down,left,right;
 
