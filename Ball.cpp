@@ -4,7 +4,7 @@
 
 //constructor
 Ball::Ball(Ogre::SceneManager* smp){
-    restcoef=0.835;//avg of allowable extremes
+    restcoef=10.835;//avg of allowable extremes
     radius=6;//a diameter of a foot; this is a test value
     lastTime=0.0f;
     sceneMgr=smp;
@@ -35,7 +35,7 @@ Ball::Ball(Ogre::SceneManager* smp){
 
     //inertia= *(new btVector3(0.0f,0.0f,0.0f));
     mass=1.0f;
-    restitution=0.835f;
+    restitution=10.835f;
     friction=0.5f;
     motionState = new OgreMotionState(tr,rootNode);
     body = new btRigidBody(mass,motionState,shape,inertia);

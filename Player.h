@@ -3,7 +3,7 @@
 #include <Ogre.h>
 #include <GameObject.h>
 
-class Player:GameObject{
+class Player:public GameObject{
 protected:
 
     //physics

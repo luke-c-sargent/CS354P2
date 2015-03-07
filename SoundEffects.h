@@ -6,8 +6,6 @@
 #include <stdio.h>
 #include <string>
 
-
-/*	http://lazyfoo.net/tutorials/SDL/21_sound_effects_and_music/index.php	*/
 class BaseApplication;
 
 class SoundEffects{
@@ -15,20 +13,24 @@ class SoundEffects{
 
 
 public:
-	//Set these all to NULL initially
-	
-	//The music that will be played
-	Mix_Music *gMusic;
+    //Set these all to NULL initially
 
-	//The sound effects that will be used
-	Mix_Chunk *gScratch;
-	Mix_Chunk *gHigh;
-	Mix_Chunk *gMedium;
-	Mix_Chunk *gLow;
+    bool enable_Sound;
+    //The music that will be played
+    Mix_Music *gMusic;
 
-	SoundEffects();
-	bool init();
-	bool load_files();
-	void clean_up();
-	bool playMusic();
+    //The sound effects that will be used
+    Mix_Chunk *gSwing;
+    Mix_Chunk *gHigh;
+    Mix_Chunk *gMedium;
+    Mix_Chunk *gLow;
+
+    SoundEffects();
+    bool init();
+    bool load_files();
+    void clean_up();
+    void playMusic();
+    void pauseMusic();
+    void playEffect(int);
+    void enableSound();
 };

@@ -6,15 +6,11 @@
 using std::cout;
 
 Simulator::Simulator(){
-    ///collision configuration contains default setup for memory, collision setup.
-   collisionConfiguration = new btDefaultCollisionConfiguration();
-   ///use the default collision dispatcher. For parallel processing you can use a different dispatcher
-   dispatcher = new btCollisionDispatcher(collisionConfiguration);
-   ///btDbvtBroadphase is a good general purpose broadphase. You can also try out btAxis3Sweep.
-   overlappingPairCache = new btDbvtBroadphase();
-   ///the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
-   solver = new btSequentialImpulseConstraintSolver();
-   dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher,overlappingPairCache,solver,collisionConfiguration);
+    collisionConfiguration = new btDefaultCollisionConfiguration();
+    dispatcher = new btCollisionDispatcher(collisionConfiguration);
+    overlappingPairCache = new btDbvtBroadphase();
+    solver = new btSequentialImpulseConstraintSolver();
+    dynamicsWorld = new btDiscreteDynamicsWorld( dispatcher, overlappingPairCache, solver, collisionConfiguration);
    dynamicsWorld->setGravity(btVector3(0,-386, 0));//386.09 inches/s^2 = 9.8m/s^2
    //keep track of the shapes, we release memory at exit.
    //make sure to re-use collision shapes among rigid bodies whenever possible!

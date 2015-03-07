@@ -33,6 +33,13 @@ BaseApplication::~BaseApplication(void)
 
 void BaseApplication::createScene(void)
 {
+    //init sound
+    sounds = new SoundEffects();
+    event = new SDL_Event();
+    sounds->init();
+    sounds->load_files();
+    sounds->playMusic();
+
     //init sim
     sim = new Simulator();
 
@@ -52,13 +59,11 @@ void BaseApplication::createScene(void)
 	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
 
 	CEGUI::SchemeManager::getSingleton().createFromFile("TaharezLook.scheme");
-	CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor()
-									.setDefaultImage("TaharezLook/MouseArrow");
+    //CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor()									.setDefaultImage("TaharezLook/MouseArrow");
 	
 	CEGUI::Window *guiRoot = CEGUI::WindowManager::getSingleton().loadLayoutFromFile("scoreboard.layout"); 
 	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(guiRoot);
-	
-	
+
     //create elements
     Court * court = new Court(mSceneMgr);
     Ball * ball = new Ball(mSceneMgr);
@@ -138,7 +143,7 @@ void BaseApplication::createCamera(void)
     // Create the camera
     mCamera = mSceneMgr->createCamera("PlayerCam");
 
-    // Position it at 500 in Z direction
+    // Position it
     mCamera->setPosition(Ogre::Vector3(0,0,400));
     // Look back along -Z
     mCamera->lookAt(Ogre::Vector3(0,0,-200));
@@ -252,6 +257,9 @@ bool BaseApplication::setup(void)
 {
     mRoot = new Ogre::Root(mPluginsCfg);
 
+    up=down=left=right=false;
+
+
     setupResources();
 
     bool carryOn = configure();
@@ -304,6 +312,13 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
     if(mShutDown)
         return false;
 	
+    //place camera
+    Ogre::Vector3 behindplayer = player->pos + Ogre::Vector3(0,60,120);
+    mCamera->setPosition(behindplayer);
+    // Look back along -Z
+    Ogre::Vector3 target = behindplayer + Ogre::Vector3(0,-10,-10);
+    //mCamera->lookAt(Ogre::Vector3(0,0,-200));
+
     //Need to capture/update each device
     mKeyboard->capture();
     mMouse->capture();
@@ -311,6 +326,29 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
     CEGUI::System::getSingleton().injectTimePulse(evt.timeSinceLastFrame);
     
     processUnbufferedInput(evt);
+
+    static Ogre::Real mMove = 0.8;// The movement constant
+    Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
+
+    if(up){
+        if(player->pos.z > -240 + player->radius) //up
+            transVector.z += -mMove;
+    }
+    if(left){
+        if (player->pos.x > -120 + player->radius) // left
+            transVector.x += -mMove;
+    }
+    if(down){
+        if (player->pos.z < 240 - player->radius) // Down
+            transVector.z += mMove;
+    }
+    if(right){
+        if (player->pos.x < 120 - player->radius) // right
+            transVector.x += mMove;
+    }
+
+    player->pos = player->pos + (transVector);
+    player->getNode()->translate(transVector, Ogre::Node::TS_LOCAL);
     
     //simulator step
     sim->stepSimulation(evt.timeSinceLastFrame,10,1./60.);
@@ -324,15 +362,41 @@ bool BaseApplication::keyPressed( const OIS::KeyEvent &arg )
     {
         mShutDown = true;
     }
+    else if(arg.key == OIS::KC_9)
+        {
+            sounds->pauseMusic();
+        }
+    else if(arg.key == OIS::KC_M)
+        {
+            sounds->playEffect(1);
+        }
+    else if(arg.key == OIS::KC_1)
+        {
+            sounds->enableSound();
+        }
+    else if(arg.key == OIS::KC_W){
+        up=true;
+    }
+    else if(arg.key == OIS::KC_A){
+        left=true;
+    }
+    else if(arg.key == OIS::KC_S){
+        down=true;
+    }
+    else if(arg.key == OIS::KC_D){
+        right=true;
+    }
 	else {	
 		CEGUI::GUIContext& context = CEGUI::System::getSingleton().getDefaultGUIContext();
 		context.injectKeyDown((CEGUI::Key::Scan)arg.key);
 		context.injectChar((CEGUI::Key::Scan)arg.text);
 	}
+
 	return true;
 }
+
 bool BaseApplication::processUnbufferedInput(const Ogre::FrameEvent& evt)
-{	
+{	/*
 	static Ogre::Real mMove = 250;      // The movement constant
 	Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
 	Ogre::SceneNode * pNode = mSceneMgr->getSceneNode("PlayerNode");
@@ -347,7 +411,7 @@ bool BaseApplication::processUnbufferedInput(const Ogre::FrameEvent& evt)
 		transVector.x += mMove;
 	}
 	else{}
-	if (mKeyboard->isKeyDown(OIS::KC_W) and player->pos.z > 40 + player->radius) // Up
+    if (mKeyboard->isKeyDown(OIS::KC_W) and player->pos.z > -240 + player->radius) // Up
 	{
 		transVector.z += -mMove;
 	}
@@ -358,13 +422,29 @@ bool BaseApplication::processUnbufferedInput(const Ogre::FrameEvent& evt)
 	}
 	else{}
 	player->pos = player->pos + (transVector * evt.timeSinceLastFrame);
-    pNode->translate(transVector * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
+    pNode->translate(transVector * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);*/
 }
 
 
 bool BaseApplication::keyReleased( const OIS::KeyEvent &arg )
 {
+    if(arg.key == OIS::KC_W){
+        up=false;
+
+    }
+    else if(arg.key == OIS::KC_A){
+        left=false;
+
+    }
+    else if(arg.key == OIS::KC_S){
+        down=false;
+    }
+    else if(arg.key == OIS::KC_D){
+        right=false;
+    }
+
     CEGUI::System::getSingleton().getDefaultGUIContext().injectKeyUp((CEGUI::Key::Scan)arg.key);
+
 	return true;
 }
 

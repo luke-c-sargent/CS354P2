@@ -49,6 +49,9 @@ protected:
     void createResourceListener(void);
     void loadResources(void);
 
+    //keys
+    bool up,down,left,right;
+
     // Ogre::FrameListener
     bool frameRenderingQueued(const Ogre::FrameEvent& evt);
 
@@ -82,6 +85,10 @@ protected:
     OgreBites::ParamsPanel* mDetailsPanel;     // sample details panel
     bool mCursorWasVisible;                    // was cursor visible before dialog appeared
     bool mShutDown;
+
+    //SoundEffects
+    SoundEffects *sounds;
+    SDL_Event *event;
 
     //OIS Input devices
     OIS::InputManager* mInputManager;
