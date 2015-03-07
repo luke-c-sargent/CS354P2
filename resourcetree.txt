@@ -1,0 +1,7 @@
+./
+===> CS354P2/: root of project, contains src files, README.md, build configuration
+	===> media/: contains resources used by project
+		===> materials/	
+		===> layouts/	
+		===> models/
+		===> packs/
