@@ -22,6 +22,9 @@
 #include <OISKeyboard.h>
 #include <OISMouse.h>
 
+#include <CEGUI/CEGUI.h>
+#include <CEGUI/RendererModules/Ogre/Renderer.h> //from 0.8 it's just Ogre/Renderer.h
+
 #include <SdkTrays.h>
 #include <SdkCameraMan.h>
 
@@ -71,9 +74,10 @@ protected:
     Ogre::String mResourcesCfg;
     Ogre::String mPluginsCfg;
 	Ogre::OverlaySystem *mOverlaySystem;
+	
+	CEGUI::OgreRenderer* mRenderer;
 
     // OgreBites
-    OgreBites::SdkTrayManager* mTrayMgr;
     OgreBites::SdkCameraMan* mCameraMan;       // basic camera controller
     OgreBites::ParamsPanel* mDetailsPanel;     // sample details panel
     bool mCursorWasVisible;                    // was cursor visible before dialog appeared
