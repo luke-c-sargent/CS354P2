@@ -41,17 +41,18 @@ void GameObject::update(float elapsedTime) {
     //check collisions added here by me
     checkCollisions(true);
 
+    cout<<"presim "<<context->hit;
     simulator->getWorld()->contactTest(body, *cCallBack);
+    cout<<" postsim "<<context->hit<<"\n";
 
 
-
-    if(context->hit){}
-    //    cout<<"!!!!!!!!!!!!HIT HIT HIT!?!!!!!!!!\n";
-        //rootNode->translate(0,10,0);
+    if(context->hit){
+         cout<<"!!!!!!!!!!!!HIT HIT HIT!?!!!!!!!!\n";
+    }
 
     if (context->hit && (context->velNorm > 2.0 || context->velNorm < -2.0)
         && (lastTime > 0.5 || (context->lastBody != context->body && lastTime > 0.1))) {
-        cout << "this happens\n";
+        cout << "00000this happens\n";
         /*
         if (context->theObject->getName() == "Player") soundMgr->playClip(punchClip);
         else soundMgr->playClip(bounceClip);*/

@@ -78,8 +78,8 @@ void BaseApplication::createScene(void)
     btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
     btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, -126, 0)));
     btRigidBody::btRigidBodyConstructionInfo                  groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));
-    groundRigidBodyCI.m_restitution=1.0;
-
+    groundRigidBodyCI.m_restitution=0.9;
+    groundRigidBodyCI.m_friction=0.5;
     btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
     sim->getWorld()->addRigidBody(groundRigidBody);
 

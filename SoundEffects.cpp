@@ -30,7 +30,7 @@ bool SoundEffects::load_files() {
 
     enable_Sound = true;
     //Load the music
-    gMusic = Mix_LoadMUS( "mario.mp3" );
+    gMusic = Mix_LoadMUS( "music.mp3" );
 
     //If there was a problem loading the music
     if( gMusic == NULL )

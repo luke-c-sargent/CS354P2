@@ -3,6 +3,7 @@
 #pragma once
 
 #include <btBulletDynamicsCommon.h>
+#include <stdio.h>
 
 class GameObject;
 
@@ -32,12 +33,10 @@ struct CollisionContext {
         velocity.setZero();
     }
 };
-
+//! Constructor, pass whatever context you want to have available when processing contacts
+/*! You may also want to set m_collisionFilterGroup and m_collisionFilterMask
+*  (supplied by the superclass) for needsCollision() */
 struct BulletContactCallback : public btCollisionWorld::ContactResultCallback {
-
-    //! Constructor, pass whatever context you want to have available when processing contacts
-    /*! You may also want to set m_collisionFilterGroup and m_collisionFilterMask
-     *  (supplied by the superclass) for needsCollision() */
     BulletContactCallback(btRigidBody& tgtBody , CollisionContext& context /*, ... */): btCollisionWorld::ContactResultCallback(), body(tgtBody), ctxt(context) { }
 
     btRigidBody& body; //!< The body the sensor is monitoring
@@ -46,8 +45,6 @@ struct BulletContactCallback : public btCollisionWorld::ContactResultCallback {
     //! If you don't want to consider collisions where the bodies are joined by a constraint, override needsCollision:
     /*! However, if you use a btCollisionObject for #body instead of a btRigidBody,
      *  then this is unnecessarycheckCollideWithOverride isn't available */
-
-
     virtual bool needsCollision(btBroadphaseProxy* proxy) const {
         // superclass will check m_collisionFilterGroup and m_collisionFilterMask
         if(!btCollisionWorld::ContactResultCallback::needsCollision(proxy))
@@ -60,6 +57,7 @@ struct BulletContactCallback : public btCollisionWorld::ContactResultCallback {
     virtual btScalar addSingleResult(btManifoldPoint& cp,const btCollisionObjectWrapper* colObj0, int partId0, int index0, const btCollisionObjectWrapper* colObj1, int partId1, int index1) {
 
         ctxt.hit = true;
+        std::cout<<"callbackLPA="<<cp.m_localPointA<<"\n";
         ctxt.lastBody = ctxt.body;
         if(colObj0->m_collisionObject == &body) {
             ctxt.point = cp.m_localPointA;

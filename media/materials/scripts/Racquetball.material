@@ -87,6 +87,7 @@ material Ball
 	}
 }
 material PlayerWire
+{
 	technique
 	{
 		pass

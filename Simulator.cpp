@@ -10,7 +10,7 @@ Simulator::Simulator(){
     dispatcher = new btCollisionDispatcher(collisionConfiguration);
     overlappingPairCache = new btDbvtBroadphase();
     solver = new btSequentialImpulseConstraintSolver();
-    dynamicsWorld = new btDiscreteDynamicsWorld( dispatcher, overlappingPairCache, solver, collisionConfiguration);
+    dynamicsWorld = new btDiscreteDynamicsWorld( dispatcher, overlappingPairCache, solver,collisionConfiguration);
    dynamicsWorld->setGravity(btVector3(0,-386, 0));//386.09 inches/s^2 = 9.8m/s^2
    //keep track of the shapes, we release memory at exit.
    //make sure to re-use collision shapes among rigid bodies whenever possible!
@@ -22,7 +22,7 @@ void Simulator::stepSimulation(const Ogre::Real elapsedTime, int maxSubSteps, co
     dynamicsWorld->stepSimulation(elapsedTime, maxSubSteps, fixedTimestep);
     for (unsigned int i = 0; i < objList.size(); i++){
         if (objList[i]->doUpdates()){
-            //checkHit(i);
+            checkHit(i);
             objList[i]->update(elapsedTime);
         }
     }

@@ -9,6 +9,6 @@ Player::Player(Ogre::SceneManager* smp){
     Ogre::Entity * entity=sceneMgr->createEntity("Player","cube.mesh");
     rootNode->attachObject(entity);
     entity->setCastShadows(true);
-    entity->setMaterialName("Ball");
+    entity->setMaterialName("PlayerWire");
     rootNode->scale(.25,1,.25);
 }
