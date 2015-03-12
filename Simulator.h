@@ -7,15 +7,14 @@ class GameObject;
 
 class Simulator{
 protected:
-    btDefaultCollisionConfiguration* collisionConfiguration;
+    btDefaultCollisionConfiguration* collisionConfig;
     btCollisionDispatcher* dispatcher;
-    btBroadphaseInterface* overlappingPairCache;
+    btBroadphaseInterface* broadphase;
     btSequentialImpulseConstraintSolver* solver;
     btDiscreteDynamicsWorld* dynamicsWorld; //inherits from CollisionWorld
     btConstraintSolver* mConstraintsolver;
     Ogre::SceneManager* sceneMgr;
     std::deque<GameObject*> objList;
-    std::deque<int> idList;
 public:
     Simulator();
     void stepSimulation(const Ogre::Real elapsedTime, int maxSubSteps, const Ogre::Real fixedTimestep);

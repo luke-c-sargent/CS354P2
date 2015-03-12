@@ -2,7 +2,7 @@
 
 #include <Ogre.h>
 #include "Simulator.h"
-#include "BulletContactCallback.h"
+#include <btBulletDynamicsCommon.h>
 
 class OgreMotionState;
 
@@ -12,37 +12,28 @@ protected:
     Ogre::SceneManager* sceneMgr;
     Ogre::SceneNode* rootNode;
     Ogre::Entity* geom;
-    OgreMotionState* motionState;
 
     Simulator* simulator;
+    btMotionState* ms;
     btCollisionShape* shape;
     btRigidBody* body;
-    btTransform tr;
-    btVector3 inertia;
 
-    btVector3 position;
-    btVector3 rotation;
-
+    //physical properties
     btScalar mass;
-    btScalar restitution;
     btScalar friction;
-    bool kinematic;
-    bool needsUpdates;
-
-    float lastTime;
-    float elapsedTime;
+    btScalar restitution;
+    btVector3 position;
+    btVector3 inertia;
+    btQuaternion rotation;
 
 public:
-    BulletContactCallback* cCallBack;
-    CollisionContext* context;
-    void checkCollisions(bool check);
+    GameObject();
     void addToSimulator();
-    bool doUpdates();
-    void update(float elapsedTime);
     btRigidBody* getBody();
     void setSimulator(Simulator* insim);
     void printpos();
     Ogre::SceneNode* getNode();
     Ogre::String getName();
-    OgreMotionState * getMotionState();
+    void updateTransform();
+
 };
