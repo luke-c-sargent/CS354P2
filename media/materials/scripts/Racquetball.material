@@ -79,8 +79,8 @@ material Ball
 		{
 			texture_unit
 			{
-				texture ball.png
-				env_map spherical
+				texture ball_DEBUG.png
+				//env_map spherical
 			}
 			shading phong
 		}

@@ -4,13 +4,11 @@
 #include <GameObject.h>
 
 class Player:public GameObject{
-protected:
-
-    //physics
-    Ogre::Real restcoef;
-
 public:
-	Ogre::Vector3 pos;
-	Ogre::Real radius;
+    btScalar w,l,h;
     Player(Ogre::SceneManager* smp);
+    void setPos(Ogre::Vector3 pos);
+    btScalar getX();
+    btScalar getY();
+    btScalar getZ();
 };

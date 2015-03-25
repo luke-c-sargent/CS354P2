@@ -79,14 +79,17 @@ material Ball
 		{
 			texture_unit
 			{
-				texture ball.png
-				env_map spherical
+				texture ball_DEBUG.png
+				//env_map spherical
 			}
+			filtering anisotropic
+			scale 0.1 0.1
 			shading phong
 		}
 	}
 }
 material PlayerWire
+{
 	technique
 	{
 		pass

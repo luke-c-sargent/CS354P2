@@ -21,7 +21,7 @@ Ball::Ball(Ogre::SceneManager* smp){
     Ogre::Entity * entity=sceneMgr->createEntity("ball","sphere.mesh");
     rootNode->attachObject(entity);
 
-    //pretty
+    //beautification
     entity->setCastShadows(true);
     entity->setMaterialName("Ball");
     //ogre sphere.mesh has radius 100;

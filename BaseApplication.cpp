@@ -2,6 +2,9 @@
 #include <boost/lexical_cast.hpp>
 using std::cout;
 
+/* D-BUGZ */
+int counter = 0;
+
 //-------------------------------------------------------------------------------------
 BaseApplication::BaseApplication(void)
     : mRoot(0),
@@ -86,38 +89,26 @@ void BaseApplication::createScene(void)
     //create elements
     Court * court = new Court(mSceneMgr);
     Ball * ball = new Ball(mSceneMgr);
-    ball->setSimulator(sim);
     player = new Player(mSceneMgr);
+
+    ball->setSimulator(sim);
+    court->setSimulator(sim);
+
 
     //create sim
     /* */
     sim->addObject(ball);
-    //sim->addObject(court);
+    sim->addObject(player);
+//    sim->addObject(court);
+    court->addToSimulator();
+    mSceneMgr->getSceneNode("PlayerNode")->translate(player->getPos());
 
-    btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
-    btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, -120, 0)));
-    btRigidBody::btRigidBodyConstructionInfo                  groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));
-    groundRigidBodyCI.m_restitution=0.9;
-    groundRigidBodyCI.m_friction=0.5;
-    btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
-    sim->getWorld()->addRigidBody(groundRigidBody);
-
-
-    btTransform trans;
-    groundRigidBody->getMotionState()->getWorldTransform(trans);
-
-
-
-    cout << "rigidbodyheight="<<trans.getOrigin().getY()<<"\n";
-
-    mSceneMgr->getSceneNode("PlayerNode")->translate(player->pos);
-	
 	
     //lighting
 
 	Ogre::Light * light = mSceneMgr->createLight("light1");
     light->setType(Ogre::Light::LT_POINT);
-    light->setPosition(Ogre::Vector3(0,120,0));
+    light->setPosition(Ogre::Vector3(0,110,0));
     light->setDiffuseColour(1.0, 0.95, 0.6);
     light->setSpecularColour(1.0, 1.0, 1.0);
     light->setAttenuation(300,.1,.00001,.00004);
@@ -128,6 +119,13 @@ void BaseApplication::createScene(void)
     sounds->playMusic();
 
 }
+
+//kill music
+void BaseApplication::musicOff()
+{
+    sounds->playMusic();
+}
+
 
 //-------------------------------------------------------------------------------------
 bool BaseApplication::configure(void)
@@ -330,13 +328,6 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
     if(mShutDown)
         return false;
-	
-    //place camera
-    Ogre::Vector3 behindplayer = player->pos + Ogre::Vector3(0,60,120);
-    mCamera->setPosition(behindplayer);
-    // Look back along -Z
-    Ogre::Vector3 target = behindplayer + Ogre::Vector3(0,-10,-10);
-    //mCamera->lookAt(Ogre::Vector3(0,0,-200));
 
     //Need to capture/update each device
     mKeyboard->capture();
@@ -346,32 +337,53 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
     
     processUnbufferedInput(evt);
 
-    static Ogre::Real mMove = 0.8;// The movement constant
+    static Ogre::Real mMove = 100;//0.8; // The movement constant
     Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
 
     if(up){
-        if(player->pos.z > -240 + player->radius) //up
+        if(player->getZ() > -240 + player->l) //up
             transVector.z += -mMove;
     }
     if(left){
-        if (player->pos.x > -120 + player->radius) // left
+        if (player->getX() > -120 + player->w) // left
             transVector.x += -mMove;
     }
     if(down){
-        if (player->pos.z < 240 - player->radius) // Down
+        if (player->getZ() < 240 - player->l) // Down
             transVector.z += mMove;
     }
     if(right){
-        if (player->pos.x < 120 - player->radius) // right
+        if (player->getX() < 120 - player->w) // right
             transVector.x += mMove;
     }
 
-    player->pos = player->pos + (transVector);
-    player->getNode()->translate(transVector, Ogre::Node::TS_LOCAL);
-    
+    //player->setPos( player->getPos() + (transVector) );
+    //player->setTransform(player->getPos());
+    //player->getNode()->translate(transVector, Ogre::Node::TS_LOCAL);
+    player->getBody()->setLinearVelocity(btVector3(transVector.x,transVector.y,transVector.z));
+
+    //place camera
+    Ogre::Vector3 behindplayer = player->getPos() + Ogre::Vector3(0,60,200);
+    counter++;
+    if(counter==60)
+    {/*
+        cout << "["<<player->getPos().x <<", " <<
+                     player->getPos().y <<", " <<
+                     player->getPos().z<"]\n";
+        counter=0;
+        */
+    }
+    mCamera->setPosition(behindplayer);
+    // Look back along -Z
+    Ogre::Vector3 target = behindplayer + Ogre::Vector3(0,-10,-10);
+    //mCamera->lookAt(Ogre::Vector3(0,0,-200));
+
+
     //simulator step
     sim->stepSimulation(evt.timeSinceLastFrame,10,1./60.);
 	
+    player->updateTransform();
+
 	timet++;
 	
 	std::string str = boost::lexical_cast<std::string>(scoret);
@@ -425,33 +437,7 @@ bool BaseApplication::keyPressed( const OIS::KeyEvent &arg )
 }
 
 bool BaseApplication::processUnbufferedInput(const Ogre::FrameEvent& evt)
-{	/*
-	static Ogre::Real mMove = 250;      // The movement constant
-	Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
-	Ogre::SceneNode * pNode = mSceneMgr->getSceneNode("PlayerNode");
-	
-    if (mKeyboard->isKeyDown(OIS::KC_A) and player->pos.x > -120 + player->radius) // left
-	{
-		transVector.x += -mMove;
-	}
-	else{}
-	if (mKeyboard->isKeyDown(OIS::KC_D) and player->pos.x < 120 - player->radius) // right
-	{
-		transVector.x += mMove;
-	}
-	else{}
-    if (mKeyboard->isKeyDown(OIS::KC_W) and player->pos.z > -240 + player->radius) // Up
-	{
-		transVector.z += -mMove;
-	}
-	else{}
-	if (mKeyboard->isKeyDown(OIS::KC_S) and player->pos.z < 240 - player->radius) // Down
-	{
-		transVector.z += mMove;
-	}
-	else{}
-	player->pos = player->pos + (transVector * evt.timeSinceLastFrame);
-    pNode->translate(transVector * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);*/
+{
 }
 
 
@@ -542,8 +528,22 @@ extern "C" {
     int main(int argc, char *argv[])
 #endif
     {
+        //parse args
+
         // Create application object
         BaseApplication app;
+        cout << "\n\n\nKAJFAKDJFAK:DJFAK:DJFAK:DJFAK:DFJA:DKFJAK:DFJA:DJFAK:DJFAK:DJFAK:DFJAK:DJFAK:DJFADK:FJAK:DFJAK:DJFAK:DJFA:DKJFAK:DJFAK:DJFA:DJF\n\n\n\n";
+        if(argc>1)
+        {
+            switch(argv[1][0]){
+                case('m'):
+                    app.musicOff();
+                default:
+                    break;
+            }
+
+        }
+
 
         try {
             app.go();

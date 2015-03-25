@@ -36,6 +36,7 @@ public:
     BaseApplication(void);
     ~BaseApplication(void);
     void go(void);
+    void musicOff();
     int bouncest;
 
 protected:

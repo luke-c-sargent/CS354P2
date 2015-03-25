@@ -35,5 +35,7 @@ public:
     Ogre::SceneNode* getNode();
     Ogre::String getName();
     void updateTransform();
+    void setTransform(Ogre::Vector3 tr);
+    Ogre::Vector3 getPos();
 
 };

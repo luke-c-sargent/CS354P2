@@ -1,6 +1,7 @@
 #include "GameObject.h"
 #include <stdio.h>
 #include <assert.h>
+#include <string>
 
 using std::cout;
 
@@ -14,7 +15,7 @@ GameObject::GameObject() :
     shape(0),
     body(0),
     position(0.0f,0.0f,0.0f),
-    rotation(0.0f,0.0f,0.0f){
+    rotation(0.0f,0.0f,0.0f,0.0f){
 
 }
 
@@ -24,11 +25,19 @@ void GameObject::addToSimulator() {
 }
 
 void GameObject::updateTransform(){
+
     btTransform tr;
     ms->getWorldTransform(tr);
+    if(this->name.compare("Court")!=0){
     rootNode->setPosition(tr.getOrigin().getX(),
                           tr.getOrigin().getY(),
                           tr.getOrigin().getZ());
+    }
+}
+
+void GameObject::setTransform(Ogre::Vector3 tr){
+    const btTransform trans=btTransform(rotation,btVector3(tr.x,tr.y,tr.z));
+    ms->setWorldTransform(trans);
 }
 
 void GameObject::setSimulator(Simulator * insim){
@@ -48,4 +57,8 @@ Ogre::SceneNode* GameObject::getNode(){
 }
 Ogre::String GameObject::getName(){
     return name;
+}
+
+Ogre::Vector3 GameObject::getPos(){
+    return rootNode->getPosition();
 }

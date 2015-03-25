@@ -21,6 +21,7 @@ void Simulator::stepSimulation(const Ogre::Real elapsedTime, int maxSubSteps, co
     //update in ogre
     for(int i=0; i < objList.size();i++){
         objList[i]->updateTransform();
+
     }
 }
 
@@ -30,7 +31,6 @@ btDiscreteDynamicsWorld* Simulator::getWorld(){
 
 void Simulator::addObject (GameObject* o) {
     objList.push_back(o);
-    // use default collision group/mask values (dynamic/kinematic/static)
     dynamicsWorld->addRigidBody(o->getBody());
 }
 
