@@ -8,7 +8,7 @@ Ball::Ball(Ogre::SceneManager* smp){
 
     name = "Ball";
 
-    position=btVector3(0,50,0);
+    position=btVector3(0,50,-60);
     inertia=btVector3(0,0,0);
     rotation=btQuaternion(0,0,0,1);
 

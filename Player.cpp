@@ -21,7 +21,7 @@ Player::Player(Ogre::SceneManager* smp){
     rotation=btQuaternion(0,0,0,1);
 
     mass=1000.0f;
-    restitution=0.9f;
+    restitution=0;
     friction=0;
 
 
@@ -39,7 +39,7 @@ Player::Player(Ogre::SceneManager* smp){
 
 
     //bt values
-    shape = new btBoxShape(btVector3(/*w/2.,l/2.,h/2.*/w/2.,h/2.,l/2.));
+    shape = new btBoxShape(btVector3(w/2.,h/2.,l/2.));
     shape->calculateLocalInertia(mass,inertia);
 
 

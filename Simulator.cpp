@@ -16,7 +16,7 @@ Simulator::Simulator(){
 }
 
 void Simulator::stepSimulation(const Ogre::Real elapsedTime, int maxSubSteps, const Ogre::Real fixedTimestep) {
-    dynamicsWorld->stepSimulation(elapsedTime /*, fixedTimestep*/);
+    dynamicsWorld->stepSimulation(elapsedTime,maxSubSteps,fixedTimestep);
 
     //update in ogre
     for(int i=0; i < objList.size();i++){

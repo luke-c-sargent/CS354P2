@@ -111,7 +111,7 @@ void BaseApplication::createScene(void)
     light->setPosition(Ogre::Vector3(0,110,0));
     light->setDiffuseColour(1.0, 0.95, 0.6);
     light->setSpecularColour(1.0, 1.0, 1.0);
-    light->setAttenuation(300,.1,.00001,.00004);
+    light->setAttenuation(400,.1,.00001,.00004);
 
     SoundEffects *sounds = new SoundEffects();
     sounds->init();
@@ -378,11 +378,13 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
     Ogre::Vector3 target = behindplayer + Ogre::Vector3(0,-10,-10);
     //mCamera->lookAt(Ogre::Vector3(0,0,-200));
 
-
     //simulator step
     sim->stepSimulation(evt.timeSinceLastFrame,10,1./60.);
 	
     player->updateTransform();
+
+    if(player->getBody()->hasContactResponse())
+        cout <<"BORK\n";
 
 	timet++;
 	
@@ -532,7 +534,6 @@ extern "C" {
 
         // Create application object
         BaseApplication app;
-        cout << "\n\n\nKAJFAKDJFAK:DJFAK:DJFAK:DJFAK:DFJA:DKFJAK:DFJA:DJFAK:DJFAK:DJFAK:DFJAK:DJFAK:DJFADK:FJAK:DFJAK:DJFAK:DJFA:DKJFAK:DJFAK:DJFA:DJF\n\n\n\n";
         if(argc>1)
         {
             switch(argv[1][0]){

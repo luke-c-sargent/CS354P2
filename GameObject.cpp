@@ -16,7 +16,6 @@ GameObject::GameObject() :
     body(0),
     position(0.0f,0.0f,0.0f),
     rotation(0.0f,0.0f,0.0f,0.0f){
-
 }
 
 
