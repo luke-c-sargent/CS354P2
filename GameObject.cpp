@@ -32,6 +32,9 @@ void GameObject::updateTransform(){
                           tr.getOrigin().getY(),
                           tr.getOrigin().getZ());
     }
+    position=btVector3(tr.getOrigin().getX(),
+                       tr.getOrigin().getY(),
+                       tr.getOrigin().getZ());
 }
 
 void GameObject::setTransform(Ogre::Vector3 tr){
