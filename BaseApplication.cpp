@@ -5,6 +5,7 @@ using std::cout;
 /* D-BUGZ */
 int counter = 0;
 
+
 //-------------------------------------------------------------------------------------
 BaseApplication::BaseApplication(void)
     : mRoot(0),
@@ -19,7 +20,8 @@ BaseApplication::BaseApplication(void)
     mShutDown(false),
     mInputManager(0),
     mMouse(0),
-    mKeyboard(0)
+    mKeyboard(0),
+    ns(GAME_SINGLE)
 {
 }
 
@@ -341,26 +343,32 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
     Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
 
     if(up){
-        if(player->getZ() > -240 + player->l) //up
+        if(player->getZ() > -240 + (player->l)/2.0f) //up
             transVector.z += -mMove;
+
     }
     if(left){
-        if (player->getX() > -120 + player->w) // left
+        //cout << player->getX();
+        if (player->getX() > -120 + (player->w)/2.0f) // left
             transVector.x += -mMove;
     }
     if(down){
-        if (player->getZ() < 240 - player->l) // Down
+        if (player->getZ() < 240 - (player->l)/2.0f) // Down
             transVector.z += mMove;
     }
     if(right){
-        if (player->getX() < 120 - player->w) // right
+        if (player->getX() < 120 - (player->w)/2.0f) // right
             transVector.x += mMove;
     }
 
     //player->setPos( player->getPos() + (transVector) );
     //player->setTransform(player->getPos());
     //player->getNode()->translate(transVector, Ogre::Node::TS_LOCAL);
+
+
     player->getBody()->setLinearVelocity(btVector3(transVector.x,transVector.y,transVector.z));
+
+
 
     //place camera
     Ogre::Vector3 behindplayer = player->getPos() + Ogre::Vector3(0,60,200);
@@ -384,7 +392,6 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
     player->updateTransform();
 
     if(player->getBody()->hasContactResponse())
-        cout <<"BORK\n";
 
 	timet++;
 	
@@ -515,6 +522,11 @@ void BaseApplication::windowClosed(Ogre::RenderWindow* rw)
     }
 }
 
+void BaseApplication::changeNetworkState(NetworkState in){
+    ns = in;
+
+}
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN
 #include "windows.h"
@@ -530,6 +542,7 @@ extern "C" {
     int main(int argc, char *argv[])
 #endif
     {
+
         //parse args
 
         // Create application object
@@ -539,6 +552,16 @@ extern "C" {
             switch(argv[1][0]){
                 case('m'):
                     app.musicOff();
+                case('c'):
+                    cout << "client!\n";
+                    app.changeNetworkState(BaseApplication::GAME_CLIENT);
+                    exit(0);
+                    break;
+                case('s'):
+                    cout << "server!\n";
+                    app.changeNetworkState(BaseApplication::GAME_SERVER);
+                    exit(0);
+                    break;
                 default:
                     break;
             }

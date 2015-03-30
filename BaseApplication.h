@@ -37,7 +37,10 @@ public:
     ~BaseApplication(void);
     void go(void);
     void musicOff();
+    enum NetworkState{GAME_SINGLE,GAME_CLIENT,GAME_SERVER};
+    void changeNetworkState(NetworkState in);
     int bouncest;
+
 
 protected:
     bool setup();
@@ -51,11 +54,17 @@ protected:
     void setupResources(void);
     void createResourceListener(void);
     void loadResources(void);
-	CEGUI::Window *score;
+
+    //GUI
+    CEGUI::Window *score;
 	CEGUI::Window *bounces;
 	CEGUI::Window *time;
 	int scoret;
 	int timet;
+
+    //NETWORKING
+    NetworkState ns;
+
     //keys
     bool up,down,left,right;
 
