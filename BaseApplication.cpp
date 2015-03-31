@@ -1,5 +1,6 @@
 #include "BaseApplication.h"
 #include <boost/lexical_cast.hpp>
+
 using std::cout;
 
 /* D-BUGZ */
@@ -547,25 +548,40 @@ extern "C" {
 
         // Create application object
         BaseApplication app;
-        if(argc>1)
+        if(argc==2)
         {
             switch(argv[1][0]){
                 case('m'):
                     app.musicOff();
+
+                //NETWORK
                 case('c'):
-                    cout << "client!\n";
+                    cout << "client, no arguments, exiting!\n";
                     app.changeNetworkState(BaseApplication::GAME_CLIENT);
                     exit(0);
                     break;
                 case('s'):
-                    cout << "server!\n";
+                    cout << "server, no arguments, exiting!\n";
                     app.changeNetworkState(BaseApplication::GAME_SERVER);
                     exit(0);
                     break;
                 default:
+                    cout << "bad arg, exiting\n";
+                    exit(0);
                     break;
             }
 
+        }
+        if(argc==3){
+            if(strcmp(argv[1],"c")==0){
+                std::string netname(argv[2]);
+                cout << "Client to connect to " << netname << "\n";
+                exit(0);
+            if(strcmp(argv[1],"s")==0)
+                std::string netname(argv[2]);
+                cout << "Server to connect to " << netname << "\n";
+                exit(0);
+            }
         }
 
 

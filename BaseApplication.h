@@ -8,8 +8,6 @@
 #include "Simulator.h"
 #include "SoundEffects.h"
 
-
-
 #include <OgreCamera.h>
 #include <OgreEntity.h>
 #include <OgreLogManager.h>
@@ -29,6 +27,8 @@
 
 #include <SdkTrays.h>
 #include <SdkCameraMan.h>
+
+#include <string.h>
 
 class BaseApplication : public Ogre::FrameListener, public Ogre::WindowEventListener, public OIS::KeyListener, public OIS::MouseListener, OgreBites::SdkTrayListener
 {
@@ -63,6 +63,7 @@ protected:
 	int timet;
 
     //NETWORKING
+    std::string netname;
     NetworkState ns;
 
     //keys
@@ -124,6 +125,7 @@ protected:
     Ogre::Real ballr;
     Ogre::Real roomsize;
     Player * player;
+    Player * player2;
 };
 
 #endif // #ifndef __BaseApplication_h_
