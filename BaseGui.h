@@ -6,15 +6,21 @@
 
 class BaseGui{
   protected:
+    bool title(const CEGUI::EventArgs& /*e*/);
+    bool host(const CEGUI::EventArgs& /*e*/);
+    bool join(const CEGUI::EventArgs& /*e*/);
+    bool hudsingle(const CEGUI::EventArgs& /*e*/);
+    bool huddouble(const CEGUI::EventArgs& /*e*/);
   public:
     BaseGui();
-    void title();
-    void host();
-    void join();
-    void hudsingle();
-    void huddouble();
-    
-    int scoret;
+    bool init();
+    bool pause();
+    bool resetCounters();
+    bool updateScore(int a, int b);
+    bool updateBounces(int a);
+    bool incrementTime(int a);
+    int scoret1;
+    int scoret2;
     int timet;
     int bouncest;
     int ipt;

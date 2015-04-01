@@ -56,7 +56,7 @@ void BaseApplication::createScene(void)
     //CEGUI
     mRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
     gui = new BaseGui();
-    gui->title();
+    gui->init();
 	
     //create elements
     Court * court = new Court(mSceneMgr);
