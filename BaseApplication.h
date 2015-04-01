@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Simulator.h"
 #include "SoundEffects.h"
+#include "BaseGui.h"
 
 #include <OgreCamera.h>
 #include <OgreEntity.h>
@@ -39,8 +40,6 @@ public:
     void musicOff();
     enum NetworkState{GAME_SINGLE,GAME_CLIENT,GAME_SERVER};
     void changeNetworkState(NetworkState in);
-    int bouncest;
-
 
 protected:
     bool setup();
@@ -56,11 +55,7 @@ protected:
     void loadResources(void);
 
     //GUI
-    CEGUI::Window *score;
-	CEGUI::Window *bounces;
-	CEGUI::Window *time;
-	int scoret;
-	int timet;
+    BaseGui *gui;
 
     //NETWORKING
     std::string netname;
