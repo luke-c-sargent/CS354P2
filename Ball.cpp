@@ -13,7 +13,7 @@ Ball::Ball(Ogre::SceneManager* smp){
     rotation=btQuaternion(0,0,0,1);
 
     mass=1.0f;
-    restitution=0.835f;
+    restitution=1.0f;//0.835f;
     friction=0.5f;
 
     //bind ball to ogre

@@ -40,6 +40,9 @@ public:
     void musicOff();
     enum NetworkState{GAME_SINGLE,GAME_CLIENT,GAME_SERVER};
     void changeNetworkState(NetworkState in);
+    void pause();
+    void unpause();
+
 
 protected:
     bool setup();
@@ -61,8 +64,11 @@ protected:
     std::string netname;
     NetworkState ns;
 
-    //keys
+    //keypresses
     bool up,down,left,right;
+
+    //states
+    bool isPaused;
 
     // Ogre::FrameListener
     bool frameRenderingQueued(const Ogre::FrameEvent& evt);
@@ -89,7 +95,7 @@ protected:
     Ogre::String mResourcesCfg;
     Ogre::String mPluginsCfg;
 	Ogre::OverlaySystem *mOverlaySystem;
-	
+
 	CEGUI::OgreRenderer* mRenderer;
 
     // OgreBites

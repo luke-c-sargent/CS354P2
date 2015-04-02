@@ -22,6 +22,7 @@ BaseApplication::BaseApplication(void)
     mInputManager(0),
     mMouse(0),
     mKeyboard(0),
+    isPaused(false),
     ns(GAME_SINGLE)
 {
 }
@@ -309,9 +310,11 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
     processUnbufferedInput(evt);
 
-    static Ogre::Real mMove = 100;//0.8; // The movement constant
+    static Ogre::Real mMove = 100;//0.8; // The movement constant, unit/sec
     Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
 
+
+if(!isPaused){
     if(up){
         if(player->getZ() > -240 + (player->l)/2.0f) //up
             transVector.z += -mMove;
@@ -337,7 +340,7 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
 
     player->getBody()->setLinearVelocity(btVector3(transVector.x,transVector.y,transVector.z));
-
+}
 
 
     //place camera
@@ -356,23 +359,15 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
     Ogre::Vector3 target = behindplayer + Ogre::Vector3(0,-10,-10);
     //mCamera->lookAt(Ogre::Vector3(0,0,-200));
 
+
+if(!isPaused){
     //simulator step
     sim->stepSimulation(evt.timeSinceLastFrame,10,1./60.);
 
     player->updateTransform();
 
-    if(player->getBody()->hasContactResponse())
-
-// 	timet++;
-//
-// 	std::string str = boost::lexical_cast<std::string>(scoret);
-// 	std::string str2 = boost::lexical_cast<std::string>(bouncest);
-// 	std::string str3 = boost::lexical_cast<std::string>(timet);
-//
-// 	score->setText("score: " + str);
-// 	bounces->setText("bounces: " + str2);
-// 	time->setText("tics: " + str3);
-//
+    if(player->getBody()->hasContactResponse()){}
+}
     return true;
 }
 //-------------------------------------------------------------------------------------
@@ -394,6 +389,13 @@ bool BaseApplication::keyPressed( const OIS::KeyEvent &arg )
         {
             sounds->enableSound();
         }
+    else if (arg.key == OIS::KC_P)
+    {
+      if(isPaused)
+        isPaused=false;
+      else
+        isPaused=true;
+    }
     else if(arg.key == OIS::KC_W){
         up=true;
     }
@@ -494,7 +496,14 @@ void BaseApplication::windowClosed(Ogre::RenderWindow* rw)
 
 void BaseApplication::changeNetworkState(NetworkState in){
     ns = in;
+}
 
+void BaseApplication::pause(){
+  isPaused=true;
+}
+
+void BaseApplication::unpause(){
+  isPaused=false;
 }
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
