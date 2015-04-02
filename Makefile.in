@@ -100,7 +100,7 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_OgreApp_OBJECTS = OgreApp-Ball.$(OBJEXT) \
+am_OgreApp_OBJECTS = OgreApp-BaseGui.$(OBJEXT) OgreApp-Ball.$(OBJEXT) \
 	OgreApp-BaseApplication.$(OBJEXT) OgreApp-Court.$(OBJEXT) \
 	OgreApp-Game.$(OBJEXT) OgreApp-GameObject.$(OBJEXT) \
 	OgreApp-Player.$(OBJEXT) OgreApp-Simulator.$(OBJEXT) \
@@ -356,7 +356,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ACLOCAL_AMFLAGS = -I m4
 noinst_HEADERS = BaseApplication.h
-OgreApp_SOURCES = Ball.cpp BaseApplication.cpp Court.cpp Game.cpp GameObject.cpp Player.cpp Simulator.cpp SoundEffects.cpp Ball.h config.h Court.h Game.h GameObject.h OgreMotionState.h Player.h Simulator.h SoundEffects.h
+OgreApp_SOURCES = BaseGui.cpp Ball.cpp BaseApplication.cpp Court.cpp Game.cpp GameObject.cpp Player.cpp Simulator.cpp SoundEffects.cpp Ball.h config.h Court.h Game.h GameObject.h OgreMotionState.h Player.h Simulator.h SoundEffects.h BaseGui.h
 OgreApp_CPPFLAGS = -I$(top_srcdir)
 OgreApp_CXXFLAGS = $(OGRE_CFLAGS) $(OIS_CFLAGS) $(bullet_CFLAGS) $(CEGUI_CFLAGS) $(CEGUI_OGRE_CFLAGS) $(sdl_CFLAGS)
 OgreApp_LDADD = $(OGRE_LIBS) $(OIS_LIBS) $(bullet_LIBS) $(CEGUI_LIBS) $(CEGUI_OGRE_LIBS) $(sdl_LIBS)
@@ -479,6 +479,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OgreApp-Ball.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OgreApp-BaseApplication.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OgreApp-BaseGui.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OgreApp-Court.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OgreApp-Game.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/OgreApp-GameObject.Po@am__quote@
@@ -506,6 +507,20 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LTCXXCOMPILE) -c -o $@ $<
+
+OgreApp-BaseGui.o: BaseGui.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -MT OgreApp-BaseGui.o -MD -MP -MF $(DEPDIR)/OgreApp-BaseGui.Tpo -c -o OgreApp-BaseGui.o `test -f 'BaseGui.cpp' || echo '$(srcdir)/'`BaseGui.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/OgreApp-BaseGui.Tpo $(DEPDIR)/OgreApp-BaseGui.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='BaseGui.cpp' object='OgreApp-BaseGui.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-BaseGui.o `test -f 'BaseGui.cpp' || echo '$(srcdir)/'`BaseGui.cpp
+
+OgreApp-BaseGui.obj: BaseGui.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -MT OgreApp-BaseGui.obj -MD -MP -MF $(DEPDIR)/OgreApp-BaseGui.Tpo -c -o OgreApp-BaseGui.obj `if test -f 'BaseGui.cpp'; then $(CYGPATH_W) 'BaseGui.cpp'; else $(CYGPATH_W) '$(srcdir)/BaseGui.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/OgreApp-BaseGui.Tpo $(DEPDIR)/OgreApp-BaseGui.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='BaseGui.cpp' object='OgreApp-BaseGui.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -c -o OgreApp-BaseGui.obj `if test -f 'BaseGui.cpp'; then $(CYGPATH_W) 'BaseGui.cpp'; else $(CYGPATH_W) '$(srcdir)/BaseGui.cpp'; fi`
 
 OgreApp-Ball.o: Ball.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(OgreApp_CPPFLAGS) $(CPPFLAGS) $(OgreApp_CXXFLAGS) $(CXXFLAGS) -MT OgreApp-Ball.o -MD -MP -MF $(DEPDIR)/OgreApp-Ball.Tpo -c -o OgreApp-Ball.o `test -f 'Ball.cpp' || echo '$(srcdir)/'`Ball.cpp

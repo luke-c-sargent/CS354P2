@@ -57,7 +57,7 @@ void BaseApplication::createScene(void)
     mRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
     gui = new BaseGui();
     gui->init();
-	
+
     //create elements
     Court * court = new Court(mSceneMgr);
     Ball * ball = new Ball(mSceneMgr);
@@ -75,7 +75,7 @@ void BaseApplication::createScene(void)
     court->addToSimulator();
     mSceneMgr->getSceneNode("PlayerNode")->translate(player->getPos());
 
-	
+
     //lighting
 
 	Ogre::Light * light = mSceneMgr->createLight("light1");
@@ -281,13 +281,13 @@ CEGUI::MouseButton convertButton(OIS::MouseButtonID buttonID)
     {
     case OIS::MB_Left:
         return CEGUI::LeftButton;
- 
+
     case OIS::MB_Right:
         return CEGUI::RightButton;
- 
+
     case OIS::MB_Middle:
         return CEGUI::MiddleButton;
- 
+
     default:
         return CEGUI::LeftButton;
     }
@@ -306,7 +306,7 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
     mMouse->capture();
 
     CEGUI::System::getSingleton().injectTimePulse(evt.timeSinceLastFrame);
-    
+
     processUnbufferedInput(evt);
 
     static Ogre::Real mMove = 100;//0.8; // The movement constant
@@ -358,21 +358,21 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
     //simulator step
     sim->stepSimulation(evt.timeSinceLastFrame,10,1./60.);
-	
+
     player->updateTransform();
 
     if(player->getBody()->hasContactResponse())
 
 // 	timet++;
-// 	
+//
 // 	std::string str = boost::lexical_cast<std::string>(scoret);
 // 	std::string str2 = boost::lexical_cast<std::string>(bouncest);
 // 	std::string str3 = boost::lexical_cast<std::string>(timet);
-// 	
+//
 // 	score->setText("score: " + str);
 // 	bounces->setText("bounces: " + str2);
 // 	time->setText("tics: " + str3);
-// 	
+//
     return true;
 }
 //-------------------------------------------------------------------------------------
@@ -406,7 +406,7 @@ bool BaseApplication::keyPressed( const OIS::KeyEvent &arg )
     else if(arg.key == OIS::KC_D){
         right=true;
     }
-	else {	
+	else {
 		CEGUI::GUIContext& context = CEGUI::System::getSingleton().getDefaultGUIContext();
 		context.injectKeyDown((CEGUI::Key::Scan)arg.key);
 		context.injectChar((CEGUI::Key::Scan)arg.text);
@@ -522,7 +522,7 @@ extern "C" {
             switch(argv[1][0]){
                 case('m'):
                     app.musicOff();
-
+                    break;
                 //NETWORK
                 case('c'):
                     cout << "client, no arguments, exiting!\n";
