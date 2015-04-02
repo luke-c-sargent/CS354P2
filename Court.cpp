@@ -74,7 +74,7 @@ void Court::addWall(btRigidBody*& bod,
     shap = new btStaticPlaneShape(normal, 1);
     mos = new btDefaultMotionState(btTransform(ori, pos));
     btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, mos, shap, btVector3(0, 0, 0));
-    groundRigidBodyCI.m_restitution=0.9;
+    groundRigidBodyCI.m_restitution=1.0;
     groundRigidBodyCI.m_friction=0.5;
     groundRigidBodyCI.m_rollingFriction=0.5;
     bod = new btRigidBody(groundRigidBodyCI);

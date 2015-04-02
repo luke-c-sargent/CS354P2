@@ -8,7 +8,7 @@ Ball::Ball(Ogre::SceneManager* smp){
 
     name = "Ball";
 
-    position=btVector3(0,50,-60);
+    position=btVector3(0,-20,-60);
     inertia=btVector3(0,0,0);
     rotation=btQuaternion(0,0,0,1);
 
@@ -24,6 +24,8 @@ Ball::Ball(Ogre::SceneManager* smp){
     //beautification
     entity->setCastShadows(true);
     entity->setMaterialName("Ball");
+    rootNode->translate(position.getX(),position.getY(),position.getZ());
+
     //ogre sphere.mesh has radius 100;
     Ogre::Real scalefactor = Ogre::Real(radius/100.f);
     rootNode->scale(scalefactor,scalefactor,scalefactor);

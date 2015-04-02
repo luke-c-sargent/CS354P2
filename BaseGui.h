@@ -4,6 +4,8 @@
 #include <CEGUI/CEGUI.h>
 #include <CEGUI/RendererModules/Ogre/Renderer.h> //from 0.8 it's just Ogre/Renderer.h
 
+class BaseApplication;
+
 class BaseGui{
   protected:
     bool title(const CEGUI::EventArgs& /*e*/);
@@ -11,8 +13,11 @@ class BaseGui{
     bool join(const CEGUI::EventArgs& /*e*/);
     bool hudsingle(const CEGUI::EventArgs& /*e*/);
     bool huddouble(const CEGUI::EventArgs& /*e*/);
+
+    BaseApplication * baseapp;
+
   public:
-    BaseGui();
+    BaseGui(BaseApplication* ba);
     bool init();
     bool pause();
     bool resetCounters();

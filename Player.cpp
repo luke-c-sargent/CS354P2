@@ -12,7 +12,7 @@ Player::Player(Ogre::SceneManager* smp){
     w=25;
     h=50;
 
-    restitution=0.835;//avg of allowable extremes
+    restitution=1.0;//avg of allowable extremes
 
     name="Player";
 
@@ -21,9 +21,8 @@ Player::Player(Ogre::SceneManager* smp){
     rotation=btQuaternion(0,0,0,1);
 
     mass=1000.0f;
-    restitution=0;
+    restitution=1.0;
     friction=0;
-
 
     //bind player
     rootNode=sceneMgr->getRootSceneNode()->createChildSceneNode("PlayerNode");
@@ -33,10 +32,9 @@ Player::Player(Ogre::SceneManager* smp){
     //purdiness
     entity->setCastShadows(true);
     entity->setMaterialName("PlayerWire");
-
+    rootNode->translate(position.getX(),position.getY(),position.getZ());
 
     rootNode->scale(w/100,h/100,l/100);
-
 
     //bt values
     shape = new btBoxShape(btVector3(w/2.,h/2.,l/2.));

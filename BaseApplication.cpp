@@ -22,7 +22,7 @@ BaseApplication::BaseApplication(void)
     mInputManager(0),
     mMouse(0),
     mKeyboard(0),
-    isPaused(false),
+    isPaused(true),
     ns(GAME_SINGLE)
 {
 }
@@ -56,7 +56,7 @@ void BaseApplication::createScene(void)
 
     //CEGUI
     mRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
-    gui = new BaseGui();
+    gui = new BaseGui(this);
     gui->init();
 
     //create elements
@@ -72,14 +72,12 @@ void BaseApplication::createScene(void)
     /* */
     sim->addObject(ball);
     sim->addObject(player);
-//    sim->addObject(court);
+    sim->addObject(court);
     court->addToSimulator();
-    mSceneMgr->getSceneNode("PlayerNode")->translate(player->getPos());
-
+    //mSceneMgr->getSceneNode("PlayerNode")->translate(player->getPos());
 
     //lighting
-
-	Ogre::Light * light = mSceneMgr->createLight("light1");
+	  Ogre::Light * light = mSceneMgr->createLight("light1");
     light->setType(Ogre::Light::LT_POINT);
     light->setPosition(Ogre::Vector3(0,110,0));
     light->setDiffuseColour(1.0, 0.95, 0.6);
@@ -496,6 +494,13 @@ void BaseApplication::windowClosed(Ogre::RenderWindow* rw)
 
 void BaseApplication::changeNetworkState(NetworkState in){
     ns = in;
+}
+
+void BaseApplication::togglePause(){
+  if(isPaused)
+    isPaused=false;
+  else
+    isPaused=true;
 }
 
 void BaseApplication::pause(){

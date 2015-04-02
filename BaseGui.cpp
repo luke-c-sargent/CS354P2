@@ -1,6 +1,8 @@
 #include "BaseGui.h"
+#include "BaseApplication.h"
 
-BaseGui::BaseGui(){
+BaseGui::BaseGui(BaseApplication* ba){
+	baseapp=ba;
 	CEGUI::ImageManager::setImagesetDefaultResourceGroup("Imagesets");
 	CEGUI::Font::setDefaultResourceGroup("Fonts");
 	CEGUI::Scheme::setDefaultResourceGroup("Schemes");
@@ -73,6 +75,8 @@ bool BaseGui::host(const CEGUI::EventArgs& /*e*/){
 }
 
 bool BaseGui::hudsingle(const CEGUI::EventArgs& /*e*/){
+	baseapp->unpause();
+
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
 	CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
 

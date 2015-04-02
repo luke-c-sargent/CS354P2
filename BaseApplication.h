@@ -40,6 +40,7 @@ public:
     void musicOff();
     enum NetworkState{GAME_SINGLE,GAME_CLIENT,GAME_SERVER};
     void changeNetworkState(NetworkState in);
+    void togglePause();
     void pause();
     void unpause();
 
