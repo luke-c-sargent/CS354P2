@@ -13,14 +13,12 @@ class BaseGui{
     bool join(const CEGUI::EventArgs& /*e*/);
     bool hudsingle(const CEGUI::EventArgs& /*e*/);
     bool huddouble(const CEGUI::EventArgs& /*e*/);
-
+    CEGUI::Window *mainsheet;
     BaseApplication * baseapp;
-
   public:
     BaseGui(BaseApplication* ba);
     bool init();
     bool pause();
-    bool resetCounters();
     bool updateScore(int a, int b);
     bool updateBounces(int a);
     bool incrementTime(int a);

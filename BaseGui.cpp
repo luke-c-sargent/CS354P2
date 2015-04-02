@@ -12,8 +12,10 @@ BaseGui::BaseGui(BaseApplication* ba){
 	CEGUI::SchemeManager::getSingleton().createFromFile("TaharezLook.scheme");
 
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-	CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
-	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
+	
+	mainsheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
+	
+	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(mainsheet);
 }
 
 bool BaseGui::init(){
@@ -29,9 +31,11 @@ bool BaseGui::init(){
   	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
 	CEGUI::SchemeManager::getSingleton().createFromFile("TaharezLook.scheme");
 	CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage("TaharezLook/MouseArrow");
-	CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
+	
+	CEGUI::WindowManager::getSingleton().destroyWindow( mainsheet );
+	mainsheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
 
-	//sheet->setPosition(CEGUI::UVector2(CEGUI::UDim(0.5f, 0),CEGUI::UDim(0.5f, 0)));
+	//mainsheet->setPosition(CEGUI::UVector2(CEGUI::UDim(0.5f, 0),CEGUI::UDim(0.5f, 0)));
 
 	CEGUI::Window *single = wmgr.createWindow("TaharezLook/Button", "CEGUIDemo/b1");
 	CEGUI::Window *hostdouble = wmgr.createWindow("TaharezLook/Button", "CEGUIDemo/b2");
@@ -45,17 +49,18 @@ bool BaseGui::init(){
 	hostdouble->setText("Host Multiplayer");
 	hostdouble->setSize(CEGUI::USize(CEGUI::UDim(0.25, 0), CEGUI::UDim(0.05, 0)));
 	hostdouble->setPosition(CEGUI::UVector2(CEGUI::UDim(mx, 0),CEGUI::UDim(my+bheight, 0)));
-
+	hostdouble->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&BaseGui::host,this));
+	
 	joindouble->setText("Join Multiplayer");
 	joindouble->setSize(CEGUI::USize(CEGUI::UDim(0.25, 0), CEGUI::UDim(0.05, 0)));
 	joindouble->setPosition(CEGUI::UVector2(CEGUI::UDim(mx, 0),CEGUI::UDim(my+bheight*2, 0)));
-	joindouble->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&BaseGui::huddouble,this));
+	joindouble->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&BaseGui::join,this));
 
-	sheet->addChild(single);
-	sheet->addChild(hostdouble);
-	sheet->addChild(joindouble);
-
-	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
+	mainsheet->addChild(single);
+	mainsheet->addChild(hostdouble);
+	mainsheet->addChild(joindouble);
+	
+	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(mainsheet);
 }
 
 bool BaseGui::title(const CEGUI::EventArgs& /*e*/){
@@ -63,22 +68,51 @@ bool BaseGui::title(const CEGUI::EventArgs& /*e*/){
 }
 
 bool BaseGui::join(const CEGUI::EventArgs& /*e*/){
+	float mx=0.5-0.25/2.0;
+	float my=0.5-3*0.05/2.0;
+	
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-	CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
-	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
+	CEGUI::WindowManager::getSingleton().destroyWindow( mainsheet );
+	mainsheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
+	CEGUI::Window *window = wmgr.createWindow("TaharezLook/FrameWindow", "CEGUIDemo/Window");
+	window->setText("Joining IP");
+	window->setSize(CEGUI::USize(CEGUI::UDim(0.25, 0), CEGUI::UDim(0.20, 0)));
+	window->setPosition(CEGUI::UVector2(CEGUI::UDim(mx, 0),CEGUI::UDim(my, 0)));
+	CEGUI::Window *window2 = wmgr.createWindow("TaharezLook/Editbox", "CEGUIDemo/Window2");
+	window2->setSize(CEGUI::USize(CEGUI::UDim(1, 0), CEGUI::UDim(0.5, 0)));
+	window2->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0),CEGUI::UDim(0.00, 0)));
+	CEGUI::Window *window3 = wmgr.createWindow("TaharezLook/Button", "CEGUIDemo/Window3");
+	window3->setText("Go!");
+	window3->setSize(CEGUI::USize(CEGUI::UDim(1, 0), CEGUI::UDim(0.5, 0)));
+	window3->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0),CEGUI::UDim(0.50, 0)));
+	
+	mainsheet->addChild(window);
+	window->addChild(window2);
+	window->addChild(window3);
+	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(mainsheet);
 }
 
 bool BaseGui::host(const CEGUI::EventArgs& /*e*/){
+	float mx=0.5-0.25/2.0;
+	float my=0.5-3*0.05/2.0;
+	
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-	CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
-	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
+	CEGUI::WindowManager::getSingleton().destroyWindow( mainsheet );
+	mainsheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
+	CEGUI::Window *window = wmgr.createWindow("TaharezLook/Button", "CEGUIDemo/Window");
+	window->setText("Your IP is: ");
+	window->setSize(CEGUI::USize(CEGUI::UDim(0.25, 0), CEGUI::UDim(0.05, 0)));
+	window->setPosition(CEGUI::UVector2(CEGUI::UDim(mx, 0),CEGUI::UDim(my, 0)));
+	
+	mainsheet->addChild(window);
+	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(mainsheet);
 }
 
 bool BaseGui::hudsingle(const CEGUI::EventArgs& /*e*/){
 	baseapp->unpause();
-
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-	CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
+	CEGUI::WindowManager::getSingleton().destroyWindow( mainsheet );
+	mainsheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
 
 	CEGUI::Window *score;
 	CEGUI::Window *bounces;
@@ -101,17 +135,18 @@ bool BaseGui::hudsingle(const CEGUI::EventArgs& /*e*/){
 	time->setText("time: ");
 	time->setSize(CEGUI::USize(CEGUI::UDim(0.25, 0), CEGUI::UDim(0.05, 0)));
 	time->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f, 0),CEGUI::UDim(0.1f, 0)));
-	sheet->addChild(score);
-	sheet->addChild(bounces);
-	sheet->addChild(time);
+	mainsheet->addChild(score);
+	mainsheet->addChild(bounces);
+	mainsheet->addChild(time);
 
-	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
+	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(mainsheet);
 }
 
 bool BaseGui::huddouble(const CEGUI::EventArgs& /*e*/){
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-	CEGUI::Window *sheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
-
+	CEGUI::WindowManager::getSingleton().destroyWindow( mainsheet );
+	mainsheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
+	
 	CEGUI::Window *score1;
 	CEGUI::Window *score2;
 	CEGUI::Window *bounces;
@@ -139,10 +174,11 @@ bool BaseGui::huddouble(const CEGUI::EventArgs& /*e*/){
 	time->setText("time: ");
 	time->setSize(CEGUI::USize(CEGUI::UDim(0.25, 0), CEGUI::UDim(0.05, 0)));
 	time->setPosition(CEGUI::UVector2(CEGUI::UDim(0.0f, 0),CEGUI::UDim(0.1f, 0)));
-	sheet->addChild(score1);
-	sheet->addChild(score2);
-	sheet->addChild(bounces);
-	sheet->addChild(time);
+	mainsheet->addChild(score1);
+	mainsheet->addChild(score2);
+	mainsheet->addChild(bounces);
+	mainsheet->addChild(time);
 
-	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(sheet);
+	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(mainsheet);
+	return true;
 }
