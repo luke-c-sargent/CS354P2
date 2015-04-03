@@ -373,7 +373,7 @@ if(networkObject->connected){
     networkObject->receivePacket();
 
     if(counter%60==0)
-    cout << networkObject->toRecPacket;
+    cout << networkObject->toRecPacket <<" " << counter << "\n";
 }
     counter++;
     return true;

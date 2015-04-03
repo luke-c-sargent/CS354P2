@@ -87,7 +87,7 @@ void Network::waitForConnection(int portno)
     std:: string message(buffer);
     if (n < 0) error("ERROR reading from socket");
 
-    cout << "\n\n\nHere is the message: " << message << "\n\n\n";
+    //cout << "\n\n\nHere is the message: " << message << "\n\n\n";
 
     connected=true;
 
@@ -126,15 +126,15 @@ void Network::searchForConnection(int portno, std::string networkName)
     if (connect(clientsockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0)
         error("ERROR connecting");
 
-    printf("Please enter the message: ");
-
+    /*printf("Please enter the message: ");
+*/
     bzero(buffer,256);
-    //fgets(buffer,255,stdin);
+    /*fgets(buffer,255,stdin);
     buffer[0]='H';
     buffer[1]='i';
     buffer[2]='!';
     buffer[3]='\n';
-
+*/
     n = write(clientsockfd,buffer,strlen(buffer));
 
     if (n < 0)
