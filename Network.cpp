@@ -112,7 +112,11 @@ void Network::searchForConnection(int portno, std::string networkName)
     printf("Please enter the message: ");
 
     bzero(buffer,256);
-    fgets(buffer,255,stdin);
+    //fgets(buffer,255,stdin);
+    buffer[0]='H';
+    buffer[1]='i';
+    buffer[2]='!';
+    buffer[3]='\n';
     
     n = write(clientsockfd,buffer,strlen(buffer));
     
