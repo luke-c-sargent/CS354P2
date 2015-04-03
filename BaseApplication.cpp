@@ -1,7 +1,9 @@
 #include "BaseApplication.h"
 #include <boost/lexical_cast.hpp>
+#include <string>
 
 using std::cout;
+
 
 /* D-BUGZ */
 int counter = 0;
@@ -343,15 +345,6 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
     //place camera
     Ogre::Vector3 behindplayer = player->getPos() + Ogre::Vector3(0,60,200);
-    counter++;
-    if(counter==60)
-    {/*
-        cout << "["<<player->getPos().x <<", " <<
-                     player->getPos().y <<", " <<
-                     player->getPos().z<"]\n";
-        counter=0;
-        */
-    }
     mCamera->setPosition(behindplayer);
     // Look back along -Z
     Ogre::Vector3 target = behindplayer + Ogre::Vector3(0,-10,-10);
@@ -368,6 +361,21 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	
 	gui->incrementTics();
     }
+
+
+    std::string output = "outgoing";
+    if(networkObject->curState==GAME_CLIENT)
+        output += "_client";
+    //char out[256] = output.c_str();
+    strcpy(networkObject->toSendPacket,output.c_str());
+
+    networkObject->sendPacket();
+    networkObject->receivePacket();
+
+    if(counter%60==0)
+    cout << networkObject->toRecPacket;
+
+    counter++;
     return true;
 }
 //-------------------------------------------------------------------------------------

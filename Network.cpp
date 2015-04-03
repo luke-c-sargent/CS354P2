@@ -2,47 +2,47 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <sys/types.h> 
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <netdb.h> 
+#include <netdb.h>
 #include "BaseApplication.h"
 
 using std::cout;
 
 Network::Network(int state){
 
-	//1: server, 2: client, 3: single
-	if (state == 1) {
-		curState = GAME_SERVER;
-	}
-	else if (state == 2) {
-		curState = GAME_CLIENT;
-	}
+    //1: server, 2: client, 3: single
+    if (state == 1) {
+        curState = GAME_SERVER;
+    }
+    else if (state == 2) {
+        curState = GAME_CLIENT;
+    }
     else {
-		curState = GAME_SINGLE;
-	}
+        curState = GAME_SINGLE;
+    }
 
     //store network address
 }
 
 void error(const char *msg)
 {
-	perror(msg);
-	exit(1);
+    perror(msg);
+    exit(1);
 }
 void Network::waitForConnection(int portno)
 {
-	//cout << "\n\n\n\n\n\n@@@@@@@@@@@@@@@@@@@@@@@ inside waitForConnection@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n";
-	int portnum;
-	socklen_t clilen;
+    //cout << "\n\n\n\n\n\n@@@@@@@@@@@@@@@@@@@@@@@ inside waitForConnection@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n";
+    int portnum;
+    socklen_t clilen;
     char buffer[256];
     struct sockaddr_in serv_addr, cli_addr;
     int n;
 
     serversockfd = socket(AF_INET, SOCK_STREAM, 0);
-	
-	if (serversockfd < 0) 
+
+    if (serversockfd < 0)
         error("ERROR opening socket");
 
     struct timeval timeout;
@@ -56,9 +56,9 @@ void Network::waitForConnection(int portno)
         if (setsockopt (serversockfd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,
                     sizeof(timeout)) < 0)
             error("setsockopt failed\n");
-     
+
     bzero((char *) &serv_addr, sizeof(serv_addr));
-     
+
     portnum = portno;
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = INADDR_ANY;
@@ -66,14 +66,14 @@ void Network::waitForConnection(int portno)
 
 
     //Bind socket to server IP address?
-    if (bind(serversockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) 
+    if (bind(serversockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0)
         error("ERROR on binding");
 
     //Listen for connection request
     listen(serversockfd,5);
-     
+
     clilen = sizeof(cli_addr);
-	//Accept client connection request and assign new socket file descriptor
+    //Accept client connection request and assign new socket file descriptor
     clientsockfd = accept(serversockfd, (struct sockaddr *) &cli_addr, &clilen);
 
     if (clientsockfd < 0)
@@ -82,9 +82,9 @@ void Network::waitForConnection(int portno)
     bzero(buffer,256);
 
     n = read(clientsockfd,buffer,255);
-    std:: string message(buffer); 
+    std:: string message(buffer);
     if (n < 0) error("ERROR reading from socket");
-     
+
     cout << "\n\n\nHere is the message: " << message << "\n\n\n";
 
     //close(serversockfd);
@@ -97,14 +97,14 @@ void Network::searchForConnection(int portno, std::string networkName)
 
     int portnum, n;
     struct sockaddr_in serv_addr;
-    struct hostent *server;    
-    
+    struct hostent *server;
+
     portnum = portno;
     clientsockfd = socket(AF_INET, SOCK_STREAM, 0);
 
-    if (clientsockfd < 0) 
+    if (clientsockfd < 0)
         error("ERROR opening socket");
-    
+
     char url[networkName.length()+1];
     strcpy(url, networkName.c_str());
 
@@ -118,7 +118,7 @@ void Network::searchForConnection(int portno, std::string networkName)
 
     serv_addr.sin_port = htons(portno);
 
-    if (connect(clientsockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0) 
+    if (connect(clientsockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0)
         error("ERROR connecting");
 
     printf("Please enter the message: ");
@@ -129,45 +129,74 @@ void Network::searchForConnection(int portno, std::string networkName)
     buffer[1]='i';
     buffer[2]='!';
     buffer[3]='\n';
-    
+
     n = write(clientsockfd,buffer,strlen(buffer));
-    
-    if (n < 0) 
+
+    if (n < 0)
         error("ERROR writing to socket");
-    
+
     bzero(buffer,256);
-    
+
     //n = read(clientsockfd,buffer,255);
-    
-    if (n < 0) 
+
+    if (n < 0)
         error("ERROR reading from socket");
-    
+
     //printf("%s\n",buffer);
-    
+
     //cout << "\n\n\n\n\n\n@@@@@@@@@@@@@@@@@@@@@@@ inside searchForConnection @@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n";
 
     //close(clientsockfd);
 
 }
 
+/*
+void Network::writeSendBuffer(char buffer*)
+{
+    toSendPacket = strcpy(toSendPacket, buffer);
+    //sendPacketReady = true;
+}
+*/
 
-bool Network::sendPacket(char *data)
+bool Network::sendPacket()
 {
     int n;
-    n = write(clientsockfd, data, strlen(data));
-    if(n<0)
+
+    //if (sendPacketReady)
+    //{
+    n = write(clientsockfd, toSendPacket, strlen(toSendPacket));
+
+    if( n < 0 )
     {
         error("Error sending data from socket");
         return false;
     }
+    //}
 
-    return true;        
+
+    //Packet sent, zero out toSendPacket buffer
+    bzero(toSendPacket, 256);
+    //sendPacketReady = false;
+
+    return true;
 
 }
 
-bool Network::receivePacket(char *data)
+bool Network::receivePacket()
 {
+    int n;
 
+    bzero(toRecPacket,256);
+
+    n = read(clientsockfd,toRecPacket,255);
+
+    if( n < 0 )
+    {
+        error("Error reading data from socket");
+        return false;
+    }
+
+    return true;
 }
 
 bool Network::closeConnections()
@@ -178,7 +207,7 @@ bool Network::closeConnections()
     {
         error("Didn't close server socket");
     }
-    else if(close(clientsockfd) < 0) 
+    else if(close(clientsockfd) < 0)
     {
         error("Didn't close client socket");
     }
@@ -186,7 +215,7 @@ bool Network::closeConnections()
 
     if(this->curState ==GAME_CLIENT)
     {
-       
+
         close(clientsockfd);
 
         return true;
@@ -200,10 +229,10 @@ bool Network::closeConnections()
     }
     else
     {
-        return false;    
+        return false;
     }
-    
 
-    
+
+
 }
 //setAddress function

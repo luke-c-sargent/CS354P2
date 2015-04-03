@@ -133,6 +133,8 @@ bool BaseGui::incrementBounces(){
 // 	time->setText("tics: " + str3);
 // 	
 
+
+//client join button
 bool BaseGui::join(const CEGUI::EventArgs& /*e*/){
 	float mx=0.5-0.25/2.0;
 	float my=0.5-3*0.05/2.0;
@@ -174,6 +176,8 @@ bool BaseGui::joingo(const CEGUI::EventArgs& /*e*/){
     baseapp->networkObject->searchForConnection(55565, networkname);
 }
 
+
+//host join
 bool BaseGui::host(const CEGUI::EventArgs& /*e*/){
 	float mx=0.5-0.25/2.0;
 	float my=0.5-3*0.05/2.0;
@@ -188,11 +192,15 @@ bool BaseGui::host(const CEGUI::EventArgs& /*e*/){
 	
 	mainsheet->addChild(window);
 	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(mainsheet);
+    //CEGUI::System::getSingleton().injectTimePulse(0.001);
 	
+//    cout << "Y U NO DO IT\n\n\n";
+
 	//server
     baseapp->networkObject = new Network(1);
     baseapp->networkObject->waitForConnection(55565);
 
+    CEGUI::WindowManager::getSingleton().destroyWindow( window );
 
 }
 
