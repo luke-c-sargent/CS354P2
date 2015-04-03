@@ -1,5 +1,5 @@
 # CS354P2
-# CS354 Project 2: Rudimentary Single Player Game
+# CS354 Project 3: Networked Game
 
 For use on utexas nethack CS machines (eg: quivering-blob).
 
