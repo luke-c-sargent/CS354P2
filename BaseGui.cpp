@@ -168,12 +168,26 @@ bool BaseGui::join(const CEGUI::EventArgs& /*e*/){
 }
 
 bool BaseGui::joingo(const CEGUI::EventArgs& /*e*/){
+    float mx=0.5-0.25/2.0;
+    float my=0.5-3*0.05/2.0;
+
     //client connection
     baseapp->networkObject = new Network(2);
     cout << wp->getText() << "\n\n\n";
     //string networkname = "riesen-chocolate-chews";
     string networkname = wp->getText().c_str();
     baseapp->networkObject->searchForConnection(55565, networkname);
+    //copypasta
+    CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
+    CEGUI::WindowManager::getSingleton().destroyWindow( mainsheet );
+    mainsheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
+    CEGUI::Window *window = wmgr.createWindow("TaharezLook/Button", "Window");
+    window->setText("Waiting...");
+    window->setSize(CEGUI::USize(CEGUI::UDim(0.25, 0), CEGUI::UDim(0.05, 0)));
+    window->setPosition(CEGUI::UVector2(CEGUI::UDim(mx, 0),CEGUI::UDim(my, 0)));
+
+    mainsheet->addChild(window);
+    CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(mainsheet);
 }
 
 
