@@ -8,24 +8,24 @@ class BaseApplication;
 
 class BaseGui{
   protected:
+    bool connectTo(const CEGUI::EventArgs& /*e*/);
     bool title(const CEGUI::EventArgs& /*e*/);
     bool host(const CEGUI::EventArgs& /*e*/);
     bool join(const CEGUI::EventArgs& /*e*/);
     bool hudsingle(const CEGUI::EventArgs& /*e*/);
-    //bool huddouble(const CEGUI::EventArgs& /*e*/);
+    bool huddouble(const CEGUI::EventArgs& /*e*/);
     CEGUI::Window *mainsheet;
     BaseApplication * baseapp;
   public:
     BaseGui(BaseApplication* ba);
     bool init();
     bool pause();
-    bool updateScore(int a, int b);
-    bool updateBounces(int a);
-    bool incrementTime(int a);
+    bool incrementScore1();
+    bool incrementScore2();
+    bool incrementBounces();
+    bool incrementTics();
     int scoret1;
     int scoret2;
     int timet;
     int bouncest;
-    int ipt;
-    int paused;
 };

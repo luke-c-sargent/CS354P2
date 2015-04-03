@@ -312,25 +312,25 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
     Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
 
 
-if(!isPaused){
-    if(up){
-        if(player->getZ() > -240 + (player->l)/2.0f) //up
-            transVector.z += -mMove;
+    if(!isPaused){
+	if(up){
+	    if(player->getZ() > -240 + (player->l)/2.0f) //up
+		transVector.z += -mMove;
 
-    }
-    if(left){
-        //cout << player->getX();
-        if (player->getX() > -120 + (player->w)/2.0f) // left
-            transVector.x += -mMove;
-    }
-    if(down){
-        if (player->getZ() < 240 - (player->l)/2.0f) // Down
-            transVector.z += mMove;
-    }
-    if(right){
-        if (player->getX() < 120 - (player->w)/2.0f) // right
-            transVector.x += mMove;
-    }
+	}
+	if(left){
+	    //cout << player->getX();
+	    if (player->getX() > -120 + (player->w)/2.0f) // left
+		transVector.x += -mMove;
+	}
+	if(down){
+	    if (player->getZ() < 240 - (player->l)/2.0f) // Down
+		transVector.z += mMove;
+	}
+	if(right){
+	    if (player->getX() < 120 - (player->w)/2.0f) // right
+		transVector.x += mMove;
+	}
 
     //player->setPos( player->getPos() + (transVector) );
     //player->setTransform(player->getPos());
@@ -358,14 +358,16 @@ if(!isPaused){
     //mCamera->lookAt(Ogre::Vector3(0,0,-200));
 
 
-if(!isPaused){
-    //simulator step
-    sim->stepSimulation(evt.timeSinceLastFrame,10,1./60.);
+    if(!isPaused){ 
+	//simulator step
+	sim->stepSimulation(evt.timeSinceLastFrame,10,1./60.);
 
-    player->updateTransform();
+	player->updateTransform();
 
-    if(player->getBody()->hasContactResponse()){}
-}
+	if(player->getBody()->hasContactResponse()){}
+	
+	gui->incrementTics();
+    }
     return true;
 }
 //-------------------------------------------------------------------------------------
@@ -406,11 +408,10 @@ bool BaseApplication::keyPressed( const OIS::KeyEvent &arg )
     else if(arg.key == OIS::KC_D){
         right=true;
     }
-	else {
+    
 		CEGUI::GUIContext& context = CEGUI::System::getSingleton().getDefaultGUIContext();
 		context.injectKeyDown((CEGUI::Key::Scan)arg.key);
-		context.injectChar((CEGUI::Key::Scan)arg.text);
-	}
+		context.injectChar((CEGUI::Key::Scan)arg.text);	
 
 	return true;
 }
