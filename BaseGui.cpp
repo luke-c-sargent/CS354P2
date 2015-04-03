@@ -6,6 +6,10 @@
 #include "Network.h"
 
 using std::string;
+using std::cout;
+
+
+CEGUI::Window * wp;
 
 BaseGui::BaseGui(BaseApplication* ba){
 	baseapp=ba;
@@ -137,16 +141,18 @@ bool BaseGui::join(const CEGUI::EventArgs& /*e*/){
 	CEGUI::WindowManager::getSingleton().destroyWindow( mainsheet );
 	mainsheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
 	CEGUI::Window *window = wmgr.createWindow("TaharezLook/FrameWindow", "Window");
-	window->setText("Joining IP");
+    window->setText("Enter Address:");
 	window->setSize(CEGUI::USize(CEGUI::UDim(0.25, 0), CEGUI::UDim(0.20, 0)));
 	window->setPosition(CEGUI::UVector2(CEGUI::UDim(mx, 0),CEGUI::UDim(my, 0)));
 	CEGUI::Window *window2 = wmgr.createWindow("TaharezLook/Editbox", "Window2");
+    wp=window2;
 	window2->setSize(CEGUI::USize(CEGUI::UDim(1, 0), CEGUI::UDim(0.5, 0)));
 	window2->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0),CEGUI::UDim(0.00, 0)));
 	CEGUI::Window *window3 = wmgr.createWindow("TaharezLook/Button", "Window3");
 	window3->setText("Go!");
 	window3->setSize(CEGUI::USize(CEGUI::UDim(1, 0), CEGUI::UDim(0.5, 0)));
 	window3->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0),CEGUI::UDim(0.50, 0)));
+    window3->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&BaseGui::joingo,this));
 	
 	mainsheet->addChild(window);
 	window->addChild(window2);
@@ -157,6 +163,15 @@ bool BaseGui::join(const CEGUI::EventArgs& /*e*/){
 // 	baseapp->networkObject = new Network(2);
 // 	string networkname = "riesen-chocolate-chews";
 // 	baseapp->networkObject->searchForConnection(55565, networkname);
+}
+
+bool BaseGui::joingo(const CEGUI::EventArgs& /*e*/){
+    //client connection
+    baseapp->networkObject = new Network(2);
+    cout << wp->getText() << "\n\n\n";
+    //string networkname = "riesen-chocolate-chews";
+    string networkname = wp->getText().c_str();
+    baseapp->networkObject->searchForConnection(55565, networkname);
 }
 
 bool BaseGui::host(const CEGUI::EventArgs& /*e*/){
@@ -175,8 +190,10 @@ bool BaseGui::host(const CEGUI::EventArgs& /*e*/){
 	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(mainsheet);
 	
 	//server
-// 	baseapp->networkObject = new Network(1);
-// 	baseapp->networkObject->waitForConnection(55565);
+    baseapp->networkObject = new Network(1);
+    baseapp->networkObject->waitForConnection(55565);
+
+
 }
 
 bool BaseGui::hudsingle(const CEGUI::EventArgs& /*e*/){
