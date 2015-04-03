@@ -546,7 +546,7 @@ extern "C" {
                     //app.changeNetworkState(BaseApplication::GAME_CLIENT);
                     std::string netName(argv[2]);
                     app.networkObject = new Network(2);
-                    app.networkObject->searchForConnection(55563, netName);
+                    app.networkObject->searchForConnection(55564, netName);
                     //exit(0);
                     break;
                 }
@@ -556,7 +556,7 @@ extern "C" {
                     //app.changeNetworkState(BaseApplication::GAME_SERVER);
 
                     app.networkObject = new Network(1);
-                    app.networkObject->waitForConnection(55563);
+                    app.networkObject->waitForConnection(55564);
 
                     cout << "\n\n\n\n\n\n@@@@@@@@@@@@@@@@@@@@@@@Back from waitForConnection@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n";
 
@@ -621,7 +621,7 @@ extern "C" {
                 e.getFullDescription().c_str() << std::endl;
 #endif
         }
-        cout << "\n\n\n@@@@@@@@@@@@@@Need to close connections@@@@@@@@@@@@@@@@\n\n\n";
+        cout << "\n\n\n@@@@@@@@@@@@@@Need to  connections@@@@@@@@@@@@@@@@\n\n\n";
         app.networkObject->closeConnections();
         return 0;
     }

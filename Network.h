@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Ogre.h>
 //#include "BaseApplication.h"
 

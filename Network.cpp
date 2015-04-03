@@ -121,7 +121,7 @@ void Network::searchForConnection(int portno, std::string networkName)
     
     bzero(buffer,256);
     
-    n = read(clientsockfd,buffer,255);
+    //n = read(clientsockfd,buffer,255);
     
     if (n < 0) 
         error("ERROR reading from socket");

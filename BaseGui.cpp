@@ -1,5 +1,10 @@
+#include <string.h>
+
 #include "BaseGui.h"
 #include "BaseApplication.h"
+#include "Network.h"
+
+using std::string;
 
 BaseGui::BaseGui(BaseApplication* ba){
 	baseapp=ba;
@@ -54,7 +59,7 @@ bool BaseGui::init(){
 	joindouble->setText("Join Multiplayer");
 	joindouble->setSize(CEGUI::USize(CEGUI::UDim(0.25, 0), CEGUI::UDim(0.05, 0)));
 	joindouble->setPosition(CEGUI::UVector2(CEGUI::UDim(mx, 0),CEGUI::UDim(my+bheight*2, 0)));
-	joindouble->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&BaseGui::join,this));
+    joindouble->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&BaseGui::join,this));
 
 	mainsheet->addChild(single);
 	mainsheet->addChild(hostdouble);
@@ -70,6 +75,11 @@ bool BaseGui::title(const CEGUI::EventArgs& /*e*/){
 bool BaseGui::join(const CEGUI::EventArgs& /*e*/){
 	float mx=0.5-0.25/2.0;
 	float my=0.5-3*0.05/2.0;
+
+    //client
+    baseapp->networkObject = new Network(2);
+    string networkname = "riesen-chocolate-chews";
+    baseapp->networkObject->searchForConnection(55565, networkname);
 	
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
 	CEGUI::WindowManager::getSingleton().destroyWindow( mainsheet );
@@ -95,7 +105,11 @@ bool BaseGui::join(const CEGUI::EventArgs& /*e*/){
 bool BaseGui::host(const CEGUI::EventArgs& /*e*/){
 	float mx=0.5-0.25/2.0;
 	float my=0.5-3*0.05/2.0;
-	
+
+    //server
+    baseapp->networkObject = new Network(1);
+    baseapp->networkObject->waitForConnection(55565);
+
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
 	CEGUI::WindowManager::getSingleton().destroyWindow( mainsheet );
 	mainsheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
@@ -110,6 +124,8 @@ bool BaseGui::host(const CEGUI::EventArgs& /*e*/){
 
 bool BaseGui::hudsingle(const CEGUI::EventArgs& /*e*/){
 	baseapp->unpause();
+
+
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
 	CEGUI::WindowManager::getSingleton().destroyWindow( mainsheet );
 	mainsheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
@@ -142,7 +158,8 @@ bool BaseGui::hudsingle(const CEGUI::EventArgs& /*e*/){
 	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(mainsheet);
 }
 
-bool BaseGui::huddouble(const CEGUI::EventArgs& /*e*/){
+/*
+bool BaseGui::huddouble(const CEGUI::EventArgs& /*e*//*){
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
 	CEGUI::WindowManager::getSingleton().destroyWindow( mainsheet );
 	mainsheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
@@ -156,6 +173,8 @@ bool BaseGui::huddouble(const CEGUI::EventArgs& /*e*/){
 	score2 = wmgr.createWindow("TaharezLook/Button", "CEGUIDemo/Score2");
 	bounces = wmgr.createWindow("TaharezLook/Button", "CEGUIDemo/bounce");
 	time = wmgr.createWindow("TaharezLook/Button", "CEGUIDemo/time");
+    bheight= 0.05;
+    bheight= 0.05;
 
 	scoret1 = 0;
 	scoret2 = 0;
@@ -181,4 +200,4 @@ bool BaseGui::huddouble(const CEGUI::EventArgs& /*e*/){
 
 	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(mainsheet);
 	return true;
-}
+}*/

@@ -12,7 +12,7 @@ class BaseGui{
     bool host(const CEGUI::EventArgs& /*e*/);
     bool join(const CEGUI::EventArgs& /*e*/);
     bool hudsingle(const CEGUI::EventArgs& /*e*/);
-    bool huddouble(const CEGUI::EventArgs& /*e*/);
+    //bool huddouble(const CEGUI::EventArgs& /*e*/);
     CEGUI::Window *mainsheet;
     BaseApplication * baseapp;
   public:
