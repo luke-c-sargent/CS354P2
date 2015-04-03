@@ -8,6 +8,7 @@
 #include "Simulator.h"
 #include "SoundEffects.h"
 #include "BaseGui.h"
+#include "Network.h"
 
 #include <OgreCamera.h>
 #include <OgreEntity.h>
@@ -38,12 +39,13 @@ public:
     ~BaseApplication(void);
     void go(void);
     void musicOff();
-    enum NetworkState{GAME_SINGLE,GAME_CLIENT,GAME_SERVER};
-    void changeNetworkState(NetworkState in);
+    //enum NetworkState{GAME_SINGLE,GAME_CLIENT,GAME_SERVER};
+    //void changeNetworkState(NetworkState in);
     void togglePause();
     void pause();
     void unpause();
 
+    Network* networkObject;
 
 protected:
     bool setup();
@@ -62,8 +64,8 @@ protected:
     BaseGui *gui;
 
     //NETWORKING
-    std::string netname;
-    NetworkState ns;
+    //std::string netname;
+    //NetworkState ns;
 
     //keypresses
     bool up,down,left,right;

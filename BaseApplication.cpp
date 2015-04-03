@@ -22,8 +22,8 @@ BaseApplication::BaseApplication(void)
     mInputManager(0),
     mMouse(0),
     mKeyboard(0),
-    isPaused(true),
-    ns(GAME_SINGLE)
+    isPaused(true)
+    //ns(GAME_SINGLE)
 {
 }
 
@@ -491,11 +491,11 @@ void BaseApplication::windowClosed(Ogre::RenderWindow* rw)
         }
     }
 }
-
+/*
 void BaseApplication::changeNetworkState(NetworkState in){
     ns = in;
 }
-
+*/
 void BaseApplication::togglePause(){
   if(isPaused)
     isPaused=false;
@@ -531,6 +531,49 @@ extern "C" {
 
         // Create application object
         BaseApplication app;
+
+        if(argc > 1)
+        {
+            switch(argv[1][0]){
+                case('m'):
+                    app.musicOff();
+
+                //NETWORK
+                case('c'):
+                {
+                    //cout << "client, no arguments, exiting!\n";
+
+                    //app.changeNetworkState(BaseApplication::GAME_CLIENT);
+                    std::string netName(argv[2]);
+                    app.networkObject = new Network(2);
+                    app.networkObject->searchForConnection(55563, netName);
+                    //exit(0);
+                    break;
+                }
+                case('s'):
+                    //cout << "server, no arguments, exiting!\n";
+
+                    //app.changeNetworkState(BaseApplication::GAME_SERVER);
+
+                    app.networkObject = new Network(1);
+                    app.networkObject->waitForConnection(55563);
+
+                    cout << "\n\n\n\n\n\n@@@@@@@@@@@@@@@@@@@@@@@Back from waitForConnection@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n";
+
+                    //exit(0);
+                    break;
+                default:
+                    cout << "bad arg, exiting\n";
+                    exit(0);
+                    break;
+                }
+           }
+
+
+
+
+
+        /*
         if(argc==2)
         {
             switch(argv[1][0]){
@@ -567,7 +610,7 @@ extern "C" {
             }
         }
 
-
+        */
         try {
             app.go();
         } catch( Ogre::Exception& e ) {
@@ -578,7 +621,8 @@ extern "C" {
                 e.getFullDescription().c_str() << std::endl;
 #endif
         }
-
+        cout << "\n\n\n@@@@@@@@@@@@@@Need to close connections@@@@@@@@@@@@@@@@\n\n\n";
+        app.networkObject->closeConnections();
         return 0;
     }
 
