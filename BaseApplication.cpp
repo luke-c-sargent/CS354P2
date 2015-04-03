@@ -362,7 +362,7 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 	gui->incrementTics();
     }
 
-
+if(networkObject->connected){
     std::string output = "outgoing";
     if(networkObject->curState==GAME_CLIENT)
         output += "_client";
@@ -374,7 +374,7 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
     if(counter%60==0)
     cout << networkObject->toRecPacket;
-
+}
     counter++;
     return true;
 }

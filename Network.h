@@ -16,6 +16,8 @@ public:
     bool receivePacket();
     bool closeConnections();
 
+    bool connected;
+
 
     NetworkState curState;
     int clientsockfd;

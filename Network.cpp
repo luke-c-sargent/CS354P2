@@ -10,7 +10,9 @@
 
 using std::cout;
 
-Network::Network(int state){
+Network::Network(int state):
+    connected(0)
+{
 
     //1: server, 2: client, 3: single
     if (state == 1) {
@@ -87,6 +89,9 @@ void Network::waitForConnection(int portno)
 
     cout << "\n\n\nHere is the message: " << message << "\n\n\n";
 
+    connected=true;
+
+
     //close(serversockfd);
     //close(clientsockfd);
 
@@ -147,6 +152,7 @@ void Network::searchForConnection(int portno, std::string networkName)
     //cout << "\n\n\n\n\n\n@@@@@@@@@@@@@@@@@@@@@@@ inside searchForConnection @@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n";
 
     //close(clientsockfd);
+    connected=true;
 
 }
 
@@ -231,7 +237,7 @@ bool Network::closeConnections()
     {
         return false;
     }
-
+    connected=false;
 
 
 }
