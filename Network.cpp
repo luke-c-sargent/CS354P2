@@ -19,11 +19,11 @@ Network::Network(int state){
 	else if (state == 2) {
 		curState = GAME_CLIENT;
 	}
-	else {
+    else {
 		curState = GAME_SINGLE;
 	}
 
-	//store network address
+    //store network address
 }
 
 void error(const char *msg)
@@ -44,6 +44,18 @@ void Network::waitForConnection(int portno)
 	
 	if (serversockfd < 0) 
         error("ERROR opening socket");
+
+    struct timeval timeout;
+        timeout.tv_sec = 10;
+        timeout.tv_usec = 0;
+
+        if (setsockopt (serversockfd, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout,
+                    sizeof(timeout)) < 0)
+            error("setsockopt failed\n");
+
+        if (setsockopt (serversockfd, SOL_SOCKET, SO_SNDTIMEO, (char *)&timeout,
+                    sizeof(timeout)) < 0)
+            error("setsockopt failed\n");
      
     bzero((char *) &serv_addr, sizeof(serv_addr));
      

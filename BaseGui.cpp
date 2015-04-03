@@ -125,7 +125,6 @@ bool BaseGui::host(const CEGUI::EventArgs& /*e*/){
 bool BaseGui::hudsingle(const CEGUI::EventArgs& /*e*/){
 	baseapp->unpause();
 
-
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
 	CEGUI::WindowManager::getSingleton().destroyWindow( mainsheet );
 	mainsheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
