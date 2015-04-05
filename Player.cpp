@@ -3,7 +3,14 @@
 
 using std::cout;
 
-Player::Player(Ogre::SceneManager* smp){
+//multiplayer stuff
+
+Player::Player(Ogre::SceneManager* smp, Ogre::String inname):
+  l(25),
+  w(25),
+  h(50)
+
+{
     //set scene manager pointer
     sceneMgr=smp;
 
@@ -12,11 +19,15 @@ Player::Player(Ogre::SceneManager* smp){
     w=25;
     h=50;
 
+    pos0=btVector3(0,-120+h/2.0,180);
+    pos1=btVector3(-60,-120+h/2.0,180);
+    pos2=btVector3(60,-120+h/2.0,180);
+
     restitution=1.0;//avg of allowable extremes
 
-    name="Player";
+    name=inname;
 
-    position = btVector3(0,-120+h/2,180);
+    position = btVector3(pos0);
     inertia= btVector3(0,0,0);
     rotation=btQuaternion(0,0,0,1);
 
@@ -25,13 +36,18 @@ Player::Player(Ogre::SceneManager* smp){
     friction=0;
 
     //bind player
-    rootNode=sceneMgr->getRootSceneNode()->createChildSceneNode("PlayerNode");
-    Ogre::Entity * entity=sceneMgr->createEntity("Player","cube.mesh");
+
+    rootNode=sceneMgr->getRootSceneNode()->createChildSceneNode(name + "Node");
+    Ogre::Entity * entity=sceneMgr->createEntity(inname,"cube.mesh");
     rootNode->attachObject(entity);
 
     //purdiness
     entity->setCastShadows(true);
-    entity->setMaterialName("PlayerWire");
+    std::string namest = name;
+    if(namest.compare("player")==0)
+      entity->setMaterialName("PlayerWire");
+    else
+    entity->setMaterialName("PlayerWire2");
     rootNode->translate(position.getX(),position.getY(),position.getZ());
 
     rootNode->scale(w/100,h/100,l/100);
@@ -62,6 +78,10 @@ Player::Player(Ogre::SceneManager* smp){
 
 void Player::setPos(Ogre::Vector3 pos){
     position = btVector3(pos.x,pos.y,pos.z);
+}
+
+void Player::setPos(btVector3 pos){
+  position=pos;
 }
 
 btScalar Player::getX(){

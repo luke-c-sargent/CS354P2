@@ -44,7 +44,11 @@ public:
     void togglePause();
     void pause();
     void unpause();
+    void togglemouse();
+    void insertP2();
 
+    void clientPacket(char * b,btVector3* bv);
+    void serverPacket(char * b);
     Network* networkObject;
 
 protected:
@@ -66,6 +70,8 @@ protected:
     //NETWORKING
     //std::string netname;
     //NetworkState ns;
+    void updateFromPacket();
+
 
     //keypresses
     bool up,down,left,right;
@@ -115,6 +121,7 @@ protected:
     OIS::InputManager* mInputManager;
     OIS::Mouse*    mMouse;
     OIS::Keyboard* mKeyboard;
+    bool mcapture;
 
     //mouse location-unused
     //Ogre::Vector2 mouseloc;
@@ -130,6 +137,6 @@ protected:
     Ogre::Real roomsize;
     Player * player;
     Player * player2;
+    Ball * ball;
 };
-
 #endif // #ifndef __BaseApplication_h_

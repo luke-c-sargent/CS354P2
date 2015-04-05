@@ -36,6 +36,8 @@ public:
     Ogre::String getName();
     void updateTransform();
     void setTransform(Ogre::Vector3 tr);
+    void setTransform(btVector3 tr);
     Ogre::Vector3 getPos();
+    void setPos(btVector3 pos);
 
 };

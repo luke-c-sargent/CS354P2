@@ -14,7 +14,7 @@ class BaseGui{
     bool join(const CEGUI::EventArgs& /*e*/);
     bool joingo(const CEGUI::EventArgs& /*e*/);
     bool hudsingle(const CEGUI::EventArgs& /*e*/);
-    bool huddouble(const CEGUI::EventArgs& /*e*/);
+    bool huddouble();//const CEGUI::EventArgs& /*e*/);
     CEGUI::Window *mainsheet;
     BaseApplication * baseapp;
   public:

@@ -22,7 +22,7 @@ BaseGui::BaseGui(BaseApplication* ba){
 	CEGUI::SchemeManager::getSingleton().createFromFile("TaharezLook.scheme");
 
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-	
+
 	mainsheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
 	timet = 0;
 	scoret1 = 0;
@@ -44,7 +44,7 @@ bool BaseGui::init(){
   	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
 	CEGUI::SchemeManager::getSingleton().createFromFile("TaharezLook.scheme");
 	CEGUI::System::getSingleton().getDefaultGUIContext().getMouseCursor().setDefaultImage("TaharezLook/MouseArrow");
-	
+
 	CEGUI::WindowManager::getSingleton().destroyWindow( mainsheet );
 	mainsheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
 
@@ -63,7 +63,7 @@ bool BaseGui::init(){
 	hostdouble->setSize(CEGUI::USize(CEGUI::UDim(0.25, 0), CEGUI::UDim(0.05, 0)));
 	hostdouble->setPosition(CEGUI::UVector2(CEGUI::UDim(mx, 0),CEGUI::UDim(my+bheight, 0)));
 	hostdouble->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&BaseGui::host,this));
-	
+
 	joindouble->setText("Join Multiplayer");
 	joindouble->setSize(CEGUI::USize(CEGUI::UDim(0.25, 0), CEGUI::UDim(0.05, 0)));
 	joindouble->setPosition(CEGUI::UVector2(CEGUI::UDim(mx, 0),CEGUI::UDim(my+bheight*2, 0)));
@@ -72,7 +72,7 @@ bool BaseGui::init(){
 	mainsheet->addChild(single);
 	mainsheet->addChild(hostdouble);
 	mainsheet->addChild(joindouble);
-	
+
 	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(mainsheet);
 }
 
@@ -81,7 +81,7 @@ bool BaseGui::title(const CEGUI::EventArgs& /*e*/){
 }
 
 bool BaseGui::connectTo(const CEGUI::EventArgs&){
-     baseapp->networkObject = new Network(2);
+     baseapp->networkObject = new Network(2,baseapp);
      string networkname = "riesen-chocolate-chews";
      baseapp->networkObject->searchForConnection(55565, networkname);
 }
@@ -123,15 +123,15 @@ bool BaseGui::incrementBounces(){
 }
 
 // 	timet++;
-// 	
+//
 // 	std::string str = boost::lexical_cast<std::string>(scoret);
 // 	std::string str2 = boost::lexical_cast<std::string>(bouncest);
 // 	std::string str3 = boost::lexical_cast<std::string>(timet);
-// 	
+//
 // 	score->setText("score: " + str);
 // 	bounces->setText("bounces: " + str2);
 // 	time->setText("tics: " + str3);
-// 	
+//
 
 
 //client join button
@@ -155,12 +155,12 @@ bool BaseGui::join(const CEGUI::EventArgs& /*e*/){
 	window3->setSize(CEGUI::USize(CEGUI::UDim(1, 0), CEGUI::UDim(0.5, 0)));
 	window3->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 0),CEGUI::UDim(0.50, 0)));
     window3->subscribeEvent(CEGUI::PushButton::EventClicked,CEGUI::Event::Subscriber(&BaseGui::joingo,this));
-	
+
 	mainsheet->addChild(window);
 	window->addChild(window2);
 	window->addChild(window3);
 	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(mainsheet);
-	
+
 	//client
 // 	baseapp->networkObject = new Network(2);
 // 	string networkname = "riesen-chocolate-chews";
@@ -172,15 +172,15 @@ bool BaseGui::joingo(const CEGUI::EventArgs& /*e*/){
     float my=0.5-3*0.05/2.0;
 
     //client connection
-    baseapp->networkObject = new Network(2);
-    cout << wp->getText() << "\n\n\n";
-    //string networkname = "riesen-chocolate-chews";
+    baseapp->networkObject->setState(2);
     string networkname = wp->getText().c_str();
     baseapp->networkObject->searchForConnection(55565, networkname);
     //copypasta
     CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
     CEGUI::WindowManager::getSingleton().destroyWindow( mainsheet );
-    mainsheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
+    huddouble();
+		/*
+		mainsheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
     CEGUI::Window *window = wmgr.createWindow("TaharezLook/Button", "Window");
     window->setText("Waiting...");
     window->setSize(CEGUI::USize(CEGUI::UDim(0.25, 0), CEGUI::UDim(0.05, 0)));
@@ -188,6 +188,7 @@ bool BaseGui::joingo(const CEGUI::EventArgs& /*e*/){
 
     mainsheet->addChild(window);
     CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(mainsheet);
+		*/
 }
 
 
@@ -203,18 +204,21 @@ bool BaseGui::host(const CEGUI::EventArgs& /*e*/){
 	window->setText("Waiting...");
 	window->setSize(CEGUI::USize(CEGUI::UDim(0.25, 0), CEGUI::UDim(0.05, 0)));
 	window->setPosition(CEGUI::UVector2(CEGUI::UDim(mx, 0),CEGUI::UDim(my, 0)));
-	
+
 	mainsheet->addChild(window);
 	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(mainsheet);
     //CEGUI::System::getSingleton().injectTimePulse(0.001);
-	
+
 //    cout << "Y U NO DO IT\n\n\n";
 
 	//server
-    baseapp->networkObject = new Network(1);
+    baseapp->networkObject->setState(1);
     baseapp->networkObject->waitForConnection(55565);
 
     CEGUI::WindowManager::getSingleton().destroyWindow( window );
+		//
+		huddouble();
+
 
 }
 
@@ -253,11 +257,13 @@ bool BaseGui::hudsingle(const CEGUI::EventArgs& /*e*/){
 	CEGUI::System::getSingleton().getDefaultGUIContext().setRootWindow(mainsheet);
 }
 
-bool BaseGui::huddouble(const CEGUI::EventArgs& /*e*/){
+bool BaseGui::huddouble(){//const CEGUI::EventArgs& /*e*/){
+	baseapp->unpause();
+
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
 	CEGUI::WindowManager::getSingleton().destroyWindow( mainsheet );
 	mainsheet = wmgr.createWindow("DefaultWindow", "CEGUIDemo/Sheet");
-	
+
 	CEGUI::Window *score1;
 	CEGUI::Window *score2;
 	CEGUI::Window *bounces;

@@ -18,6 +18,10 @@ GameObject::GameObject() :
     rotation(0.0f,0.0f,0.0f,0.0f){
 }
 
+void GameObject::setPos(btVector3 pos){
+  position=pos;
+}
+
 
 void GameObject::addToSimulator() {
     simulator->addObject(this);
@@ -39,6 +43,11 @@ void GameObject::updateTransform(){
 
 void GameObject::setTransform(Ogre::Vector3 tr){
     const btTransform trans=btTransform(rotation,btVector3(tr.x,tr.y,tr.z));
+    ms->setWorldTransform(trans);
+}
+
+void GameObject::setTransform(btVector3 tr){
+    const btTransform trans=btTransform(rotation,tr);
     ms->setWorldTransform(trans);
 }
 

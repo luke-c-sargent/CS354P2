@@ -9,9 +9,11 @@
 #include "BaseApplication.h"
 
 using std::cout;
+using std::hex;
 
-Network::Network(int state):
-    connected(0)
+Network::Network(int state,BaseApplication* bap):
+    connected(0),
+    baseapp(bap)
 {
 
     //1: server, 2: client, 3: single
@@ -24,7 +26,6 @@ Network::Network(int state):
     else {
         curState = GAME_SINGLE;
     }
-
     //store network address
 }
 
@@ -35,7 +36,7 @@ void error(const char *msg)
 }
 void Network::waitForConnection(int portno)
 {
-    //cout << "\n\n\n\n\n\n@@@@@@@@@@@@@@@@@@@@@@@ inside waitForConnection@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n";
+    cout << "NET: I am a server\n===================\n";
     int portnum;
     socklen_t clilen;
     char buffer[256];
@@ -89,6 +90,7 @@ void Network::waitForConnection(int portno)
 
     //cout << "\n\n\nHere is the message: " << message << "\n\n\n";
 
+    baseapp->insertP2();
     connected=true;
 
 
@@ -99,6 +101,8 @@ void Network::waitForConnection(int portno)
 
 void Network::searchForConnection(int portno, std::string networkName)
 {
+  cout << "NET: I am a client\n===================\n";
+
 
     int portnum, n;
     struct sockaddr_in serv_addr;
@@ -126,15 +130,8 @@ void Network::searchForConnection(int portno, std::string networkName)
     if (connect(clientsockfd,(struct sockaddr *) &serv_addr,sizeof(serv_addr)) < 0)
         error("ERROR connecting");
 
-    /*printf("Please enter the message: ");
-*/
     bzero(buffer,256);
-    /*fgets(buffer,255,stdin);
-    buffer[0]='H';
-    buffer[1]='i';
-    buffer[2]='!';
-    buffer[3]='\n';
-*/
+
     n = write(clientsockfd,buffer,strlen(buffer));
 
     if (n < 0)
@@ -152,33 +149,25 @@ void Network::searchForConnection(int portno, std::string networkName)
     //cout << "\n\n\n\n\n\n@@@@@@@@@@@@@@@@@@@@@@@ inside searchForConnection @@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n";
 
     //close(clientsockfd);
+    baseapp->insertP2();
     connected=true;
 
 }
 
-/*
-void Network::writeSendBuffer(char buffer*)
-{
-    toSendPacket = strcpy(toSendPacket, buffer);
-    //sendPacketReady = true;
-}
-*/
-
-bool Network::sendPacket()
+bool Network::sendPacket(int len)
 {
     int n;
 
-    //if (sendPacketReady)
-    //{
-    n = write(clientsockfd, toSendPacket, strlen(toSendPacket));
+    if(strlen(toSendPacket)>len)
+      len=strlen(toSendPacket);
+
+    n = write(clientsockfd, toSendPacket, len);
 
     if( n < 0 )
     {
         error("Error sending data from socket");
         return false;
     }
-    //}
-
 
     //Packet sent, zero out toSendPacket buffer
     bzero(toSendPacket, 256);
@@ -186,6 +175,14 @@ bool Network::sendPacket()
 
     return true;
 
+}
+
+void Network::printpacket(char * cp)
+{
+  for(int i=0; i < 32; i++){
+    cout << hex << (int)((unsigned char)cp[i]) <<"_";
+  }
+  cout <<"\n";
 }
 
 bool Network::receivePacket()
@@ -207,17 +204,6 @@ bool Network::receivePacket()
 
 bool Network::closeConnections()
 {
-    //cout << "\n\nClosing client connection\n\n";
-    /*
-    if(close(serversockfd) < 0)
-    {
-        error("Didn't close server socket");
-    }
-    else if(close(clientsockfd) < 0)
-    {
-        error("Didn't close client socket");
-    }
-    */
 
     if(this->curState ==GAME_CLIENT)
     {
@@ -241,4 +227,14 @@ bool Network::closeConnections()
 
 
 }
+
+void Network::setState(int in){
+  if(in==0)
+    curState=GAME_SINGLE;
+  else if(in==1)
+    curState=GAME_SERVER;
+  else if(in==2)
+    curState=GAME_CLIENT;
+}
+
 //setAddress function

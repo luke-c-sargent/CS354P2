@@ -24,9 +24,11 @@ BaseApplication::BaseApplication(void)
     mInputManager(0),
     mMouse(0),
     mKeyboard(0),
-    isPaused(true)
+    isPaused(true),
+    mcapture(true)
     //ns(GAME_SINGLE)
 {
+  networkObject=new Network(0,this);
 }
 
 //-------------------------------------------------------------------------------------
@@ -63,8 +65,9 @@ void BaseApplication::createScene(void)
 
     //create elements
     Court * court = new Court(mSceneMgr);
-    Ball * ball = new Ball(mSceneMgr);
+    ball = new Ball(mSceneMgr);
     player = new Player(mSceneMgr);
+
 
     ball->setSimulator(sim);
     court->setSimulator(sim);
@@ -152,7 +155,10 @@ void BaseApplication::createFrameListener(void)
     mWindow->getCustomAttribute("WINDOW", &windowHnd);
     windowHndStr << windowHnd;
     pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
+    pl.insert(std::make_pair(std::string("x11_mouse_grab"), std::string("false")));
+    pl.insert(std::make_pair(std::string("x11_keyboard_grab"), std::string("false")));
 
+//mouse capture
     mInputManager = OIS::InputManager::createInputSystem( pl );
 
     mKeyboard = static_cast<OIS::Keyboard*>(mInputManager->createInputObject( OIS::OISKeyboard, true ));
@@ -312,72 +318,155 @@ bool BaseApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
 
     static Ogre::Real mMove = 100;//0.8; // The movement constant, unit/sec
     Ogre::Vector3 transVector = Ogre::Vector3::ZERO;
+    btVector3 playerLV=btVector3(transVector.x,transVector.y,transVector.z);
 
 
     if(!isPaused){
-	if(up){
-	    if(player->getZ() > -240 + (player->l)/2.0f) //up
-		transVector.z += -mMove;
+    	if(up){
+    	    if(player->getZ() > -240 + (player->l)/2.0f) //up
+    		transVector.z += -mMove;
 
-	}
-	if(left){
-	    //cout << player->getX();
-	    if (player->getX() > -120 + (player->w)/2.0f) // left
-		transVector.x += -mMove;
-	}
-	if(down){
-	    if (player->getZ() < 240 - (player->l)/2.0f) // Down
-		transVector.z += mMove;
-	}
-	if(right){
-	    if (player->getX() < 120 - (player->w)/2.0f) // right
-		transVector.x += mMove;
-	}
+    	}
+    	if(left){
+    	    //cout << player->getX();
+    	    if (player->getX() > -120 + (player->w)/2.0f) // left
+    		transVector.x += -mMove;
+    	}
+    	if(down){
+    	    if (player->getZ() < 240 - (player->l)/2.0f) // Down
+    		transVector.z += mMove;
+    	}
+    	if(right){
+    	    if (player->getX() < 120 - (player->w)/2.0f) // right
+    		transVector.x += mMove;
+    	}
 
-    //player->setPos( player->getPos() + (transVector) );
-    //player->setTransform(player->getPos());
-    //player->getNode()->translate(transVector, Ogre::Node::TS_LOCAL);
-
-
-    player->getBody()->setLinearVelocity(btVector3(transVector.x,transVector.y,transVector.z));
-}
+      //player->setPos( player->getPos() + (transVector) );
+      //player->setTransform(player->getPos());
+      //player->getNode()->translate(transVector, Ogre::Node::TS_LOCAL);
+      playerLV=btVector3(transVector.x,transVector.y,transVector.z);
+    }
 
 
     //place camera
-    Ogre::Vector3 behindplayer = player->getPos() + Ogre::Vector3(0,60,200);
+    Ogre::Vector3 behindplayer;
+    if(networkObject->curState==GAME_CLIENT){
+      behindplayer = player2->getPos() + Ogre::Vector3(0,60,200);
+    }
+    else{
+      behindplayer = player->getPos() + Ogre::Vector3(0,60,200);
+    }
     mCamera->setPosition(behindplayer);
     // Look back along -Z
     Ogre::Vector3 target = behindplayer + Ogre::Vector3(0,-10,-10);
     //mCamera->lookAt(Ogre::Vector3(0,0,-200));
 
+    //packetswap
+    if(networkObject->connected){
+      int packetsize;
+      if(networkObject->curState==GAME_CLIENT){
+        packetsize=sizeof(btVector3);
+        clientPacket(networkObject->toSendPacket,&playerLV);
+      }else{
+        packetsize=sizeof(btVector3)*3;
+        serverPacket(networkObject->toSendPacket);
+      }
 
-    if(!isPaused){ 
-	//simulator step
-	sim->stepSimulation(evt.timeSinceLastFrame,10,1./60.);
+      //cout << "to send packet: ";
+      //networkObject->printpacket(networkObject->toSendPacket);
 
-	player->updateTransform();
+      networkObject->sendPacket(packetsize);
+      networkObject->receivePacket();
+      }
 
-	if(player->getBody()->hasContactResponse()){}
-	
-	gui->incrementTics();
+    if(!isPaused){
+      updateFromPacket();
+
+      player->getBody()->setLinearVelocity(playerLV);
+
+    	//simulator step
+      if(networkObject->curState!=GAME_CLIENT){
+        //if(networkObject->curState!=GAME_SINGLE)
+        sim->stepSimulation(evt.timeSinceLastFrame,10,1./60.);
+      }
+      else{
+        player2->setTransform(playerLV);
+      }
+        //updateFromPacket();
+
+        //player->updateTransform();
+
+    	if(player->getBody()->hasContactResponse()){}
+
+    	gui->incrementTics();
     }
 
-if(networkObject->connected){
-    std::string output = "outgoing";
-    if(networkObject->curState==GAME_CLIENT)
-        output += "_client";
-    //char out[256] = output.c_str();
-    strcpy(networkObject->toSendPacket,output.c_str());
-
-    networkObject->sendPacket();
-    networkObject->receivePacket();
-
-    if(counter%60==0)
-    cout << networkObject->toRecPacket <<" " << counter << "\n";
-}
     counter++;
     return true;
 }
+
+void BaseApplication::updateFromPacket(){
+
+  btVector3 * bp, *pp, *p2p;
+  if(networkObject->curState==GAME_SERVER){
+    p2p=(btVector3 *)(networkObject->toRecPacket);
+    player2->getBody()->setLinearVelocity(*p2p);
+
+    //player2->setPos(*p2p);
+//    player2->updateTransform();
+    if(counter%60==0){
+      //cout << "P2:" <<p2p->getX() <<","<< p2p->getY() <<","<<p2p->getZ() <<"\n";
+    }
+  }else if(networkObject->curState==GAME_CLIENT){
+    //networkObject->toRecPacket[0]
+    bp = (btVector3 *)(networkObject->toRecPacket);
+    pp = (btVector3 *)(networkObject->toRecPacket+sizeof(btVector3));
+    p2p = (btVector3 *)(networkObject->toRecPacket+2*sizeof(btVector3));
+    player->setPos(*pp);
+    player->getNode()->setPosition(Ogre::Vector3(pp->getX(),pp->getY(),pp->getZ()));
+    //cout << p2p->getX()<<" "<<p2p->getY()<<" "<<p2p->getZ();
+    player2->setPos(*p2p);
+    player2->getNode()->setPosition(Ogre::Vector3(p2p->getX(),p2p->getY(),p2p->getZ()));
+//  player->updateTransform();
+    ball->setPos(*bp);
+    ball->getNode()->setPosition(Ogre::Vector3(bp->getX(),bp->getY(),bp->getZ()));
+//  ball->updateTransform();
+
+
+    //btVector3 * btpp=(btVector3 *)bp;
+    /*if(counter%60==0){
+      cout << "BP:"<<bp->getX() <<","<< bp->getY() <<","<<bp->getZ() <<"\n";
+      cout << "PP:"<<pp->getX() <<","<< pp->getY() <<","<<pp->getZ() <<"\n";
+      cout << "P2P:"<<p2p->getX() <<","<< p2p->getY() <<","<<p2p->getZ() <<"\n";
+
+    }*/
+  }
+}
+
+void BaseApplication::clientPacket(char * b,btVector3* bv){
+
+  //btVector3 bp=btVector3(ball->getPos().x,ball->getPos().y,ball->getPos().z);
+  //btVector3 pp=btVector3(player2->getPos().x,player2->getPos().y,player2->getPos().z);
+
+  memcpy(b,bv,sizeof(btVector3));
+  //memcpy(b+sizeof(btVector3),&pp,sizeof(btVector3));
+}
+
+void BaseApplication::serverPacket(char * b){
+
+  btVector3 bp=btVector3(ball->getPos().x,ball->getPos().y,ball->getPos().z);
+  btVector3 pp=btVector3(player->getPos().x,player->getPos().y,player->getPos().z);
+  btVector3 p2p=btVector3(player2->getPos().x,player2->getPos().y,player2->getPos().z);
+  //cout << player2->getPos().x<<","<<player2->getPos().y<<","<<player2->getPos().z<<"\n";
+  memcpy(b,&bp,sizeof(btVector3));
+  memcpy(b+sizeof(btVector3),&pp,sizeof(btVector3));
+  memcpy(b+sizeof(btVector3)*2,&p2p,sizeof(btVector3));
+}
+
+void BaseApplication::togglemouse(){
+  mcapture=!mcapture;
+}
+
 //-------------------------------------------------------------------------------------
 bool BaseApplication::keyPressed( const OIS::KeyEvent &arg )
 {
@@ -416,10 +505,10 @@ bool BaseApplication::keyPressed( const OIS::KeyEvent &arg )
     else if(arg.key == OIS::KC_D){
         right=true;
     }
-    
+
 		CEGUI::GUIContext& context = CEGUI::System::getSingleton().getDefaultGUIContext();
 		context.injectKeyDown((CEGUI::Key::Scan)arg.key);
-		context.injectChar((CEGUI::Key::Scan)arg.text);	
+		context.injectChar((CEGUI::Key::Scan)arg.text);
 
 	return true;
 }
@@ -520,6 +609,24 @@ void BaseApplication::unpause(){
   isPaused=false;
 }
 
+void BaseApplication::insertP2(){
+  player2= new Player(mSceneMgr,"Player2");
+  player->setTransform(player->pos1);
+  player->setPos(player->pos1);
+  player2->setTransform(player->pos2);
+  player2->setPos(player->pos2);
+  sim->addObject(player2);
+  player->updateTransform();
+  player2->updateTransform();
+
+}
+
+
+
+
+//```````````````````````````
+
+
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #define WIN32_LEAN_AND_MEAN
 #include "windows.h"
@@ -541,85 +648,6 @@ extern "C" {
         // Create application object
         BaseApplication app;
 
-        if(argc > 1)
-        {
-            switch(argv[1][0]){
-                case('m'):
-                    app.musicOff();
-
-                //NETWORK
-                case('c'):
-                {
-                    //cout << "client, no arguments, exiting!\n";
-
-                    //app.changeNetworkState(BaseApplication::GAME_CLIENT);
-                    std::string netName(argv[2]);
-                    app.networkObject = new Network(2);
-                    app.networkObject->searchForConnection(55564, netName);
-                    //exit(0);
-                    break;
-                }
-                case('s'):
-                    //cout << "server, no arguments, exiting!\n";
-
-                    //app.changeNetworkState(BaseApplication::GAME_SERVER);
-
-                    app.networkObject = new Network(1);
-                    app.networkObject->waitForConnection(55564);
-
-                    cout << "\n\n\n\n\n\n@@@@@@@@@@@@@@@@@@@@@@@Back from waitForConnection@@@@@@@@@@@@@@@@@@@@\n\n\n\n\n\n\n";
-
-                    //exit(0);
-                    break;
-                default:
-                    cout << "bad arg, exiting\n";
-                    exit(0);
-                    break;
-                }
-           }
-
-
-
-
-
-        /*
-        if(argc==2)
-        {
-            switch(argv[1][0]){
-                case('m'):
-                    app.musicOff();
-                    break;
-                //NETWORK
-                case('c'):
-                    cout << "client, no arguments, exiting!\n";
-                    app.changeNetworkState(BaseApplication::GAME_CLIENT);
-                    exit(0);
-                    break;
-                case('s'):
-                    cout << "server, no arguments, exiting!\n";
-                    app.changeNetworkState(BaseApplication::GAME_SERVER);
-                    exit(0);
-                    break;
-                default:
-                    cout << "bad arg, exiting\n";
-                    exit(0);
-                    break;
-            }
-
-        }
-        if(argc==3){
-            if(strcmp(argv[1],"c")==0){
-                std::string netname(argv[2]);
-                cout << "Client to connect to " << netname << "\n";
-                exit(0);
-            if(strcmp(argv[1],"s")==0)
-                std::string netname(argv[2]);
-                cout << "Server to connect to " << netname << "\n";
-                exit(0);
-            }
-        }
-
-        */
         try {
             app.go();
         } catch( Ogre::Exception& e ) {
@@ -630,7 +658,6 @@ extern "C" {
                 e.getFullDescription().c_str() << std::endl;
 #endif
         }
-        cout << "\n\n\n@@@@@@@@@@@@@@Need to  connections@@@@@@@@@@@@@@@@\n\n\n";
         app.networkObject->closeConnections();
         return 0;
     }
